@@ -336,7 +336,7 @@
 				);
 				MARKETING_VERSION = 0.29.0;
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mowglii.$(PRODUCT_NAME:rfc1034identifier)App";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.kars3n.barcal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -362,7 +362,7 @@
 				);
 				MARKETING_VERSION = 0.29.0;
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mowglii.$(PRODUCT_NAME:rfc1034identifier)App";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.kars3n.barcal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
