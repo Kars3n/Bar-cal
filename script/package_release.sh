@@ -61,9 +61,5 @@ spctl --assess --type execute --verbose=2 "$APP_PATH"
 
 ZIP_NAME="Bar-cal-$RELEASE_VERSION-macOS-arm64.zip"
 ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$DIST_ROOT/$ZIP_NAME"
-(
-  cd "$DIST_ROOT"
-  shasum -a 256 "$ZIP_NAME" > SHA256SUMS.txt
-  shasum -a 256 -c SHA256SUMS.txt
-)
+"$ROOT_DIR/script/package_dmg.sh" "$RELEASE_VERSION" "$APP_PATH"
 echo "Release package: $DIST_ROOT/$ZIP_NAME"

@@ -1,7 +1,11 @@
 # Bar-cal
 
-A quiet native calendar and to-do drawer for your Mac. Personal fork of
-[Itsycal](https://github.com/sfsam/Itsycal), with an original Slate identity.
+A quiet native calendar and to-do drawer for your Mac.
+
+**[Download Bar-cal v1.0.0 (.dmg)](https://github.com/Kars3n/Bar-cal/releases/download/v1.0.0/Bar-cal-1.0.0-macOS-arm64.dmg)**
+
+Requires **macOS 27 or later on Apple silicon**. The app is Developer ID signed
+and notarized by Apple.
 
 ## Features
 
@@ -15,16 +19,14 @@ A quiet native calendar and to-do drawer for your Mac. Personal fork of
 - Slate, Light, Dark, and System appearances, with native size options.
 - Keyboard navigation and an optional global shortcut.
 
-## Install
+## Download
 
-Download Bar-cal from [GitHub Releases](https://github.com/Kars3n/Bar-cal/releases),
-then place **Bar-cal.app** in **Applications** before launching it.
-The release app is Developer ID signed and notarized by Apple, with its
-notarization ticket stapled to the app.
+The [v1.0.0 DMG](https://github.com/Kars3n/Bar-cal/releases/download/v1.0.0/Bar-cal-1.0.0-macOS-arm64.dmg)
+contains **Bar-cal.app** and an **Applications** shortcut. A ZIP and SHA-256
+checksums are also available on [GitHub Releases](https://github.com/Kars3n/Bar-cal/releases/latest).
 
-Version 1 requires **macOS 27 or later on Apple silicon**. Calendar and Reminders
-permissions are controlled by macOS. Reminders access is requested when you
-choose to connect it; choose your own list inside To-do.
+Calendar and Reminders permissions are controlled by macOS. Reminders access is
+requested when you choose to connect it; choose your own list inside To-do.
 
 General settings select the presentation mode, screen edge, and optional shared
 tabs. Turning tabs off restores the single calendar notch. Click the active tab
@@ -45,8 +47,7 @@ or press Escape to close the drawer. Pin keeps it open when you switch apps.
 
 ## Build
 
-Open `Itsycal.xcodeproj` in Xcode 27.2 or later. The scheme retains its upstream
-name, **Itsycal**, and builds **Bar-cal.app**.
+Use Xcode 27.2 or later to build **Bar-cal.app**.
 
 ```sh
 cp Local.xcconfig.example Local.xcconfig
@@ -58,9 +59,8 @@ Signing configuration stays in the ignored `Local.xcconfig`. See
 
 ## License and credits
 
-MIT licensed. Retain [LICENSE.txt](LICENSE.txt) and the bundled
-[third-party notices](Itsycal/ThirdPartyLicenses). Based on Itsycal by Sanjay
-Madan. The About panel includes the original attribution and acknowledgments.
+MIT licensed. Copyright notices are retained in [LICENSE.txt](LICENSE.txt).
+Bundled third-party notices are available in the app's acknowledgments.
 
 Bar-cal's Slate icon and template mark are original ChatGPT-generated artwork;
 source assets and prompts are in `Design/Generated/slate-production`.

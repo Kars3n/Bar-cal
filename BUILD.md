@@ -91,8 +91,19 @@ that notarization is not finished, keep the archive and rerun only the export:
 
 The export is checked for a Developer ID Application signature, a valid stapled
 notarization ticket, and Gatekeeper acceptance before packaging. Outputs are
-`dist/Bar-cal-1.0.0-macOS-arm64.zip` and `dist/SHA256SUMS.txt`. The archive remains
-at `dist/Bar-cal-1.0.0.xcarchive` and can be opened in Xcode Organizer.
+`dist/Bar-cal-1.0.0-macOS-arm64.dmg`, `dist/Bar-cal-1.0.0-macOS-arm64.zip`, and
+`dist/SHA256SUMS.txt`. The archive remains at `dist/Bar-cal-1.0.0.xcarchive` and
+can be opened in Xcode Organizer.
+
+To create only the DMG from an existing signed, notarized export:
+
+```sh
+./script/package_dmg.sh 1.0.0
+```
+
+The disk image includes the app and an Applications shortcut. Packaging verifies
+the image's integrity, mounts it read-only, and checks the contained app's code
+signature, stapled notarization ticket, and Gatekeeper acceptance.
 
 Release requirements: Xcode 27.2+, macOS 27+, Apple silicon. Automatic updates
 remain disabled. `make_zips_and_appcast.sh` is an upstream reference and is not
