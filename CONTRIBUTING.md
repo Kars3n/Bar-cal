@@ -7,7 +7,7 @@ Thank you for your interest in contributing!
 Bar-cal uses a local xcconfig file to manage code signing so that your
 personal signing settings are never committed to the repository.
 
-Before opening `Itsycal.xcodeproj`, copy the example config:
+Before opening `Bar-cal.xcodeproj`, copy the example config:
 
 ```
 cp Local.xcconfig.example Local.xcconfig
@@ -29,15 +29,15 @@ DEVELOPMENT_TEAM = XXXXXXXXXX
 CODE_SIGN_STYLE = Manual
 ```
 
-Use `./script/build_and_run.sh --verify` for local validation. The upstream
-project and scheme retain the name Itsycal; the app product is Bar-cal.
+Use `./script/build_and_run.sh --verify` for local validation. The project,
+scheme, and app product are named Bar-cal.
 See [BUILD.md](BUILD.md) for the focused native checks and release packaging.
 
 ## Submitting a Pull Request
 
 Make sure your PR does not include changes to `DEVELOPMENT_TEAM`,
 `DevelopmentTeam`, or `ProvisioningStyle` in
-`Itsycal.xcodeproj/project.pbxproj`. If you see those in your diff,
+`Bar-cal.xcodeproj/project.pbxproj`. If you see those in your diff,
 revert them — they are the result of Xcode writing your local signing
 settings into the project file. Setting up `Local.xcconfig` as described
 above will prevent this from happening.

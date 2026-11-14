@@ -1,8 +1,8 @@
 
 Bar-cal
 
-A quiet calendar for your Mac's menu bar or screen edge. Personal fork of Itsycal,
-maintained at https://github.com/Kars3n/Bar-cal.
+A quiet calendar for your Mac's menu bar or screen edge.
+Download: https://github.com/Kars3n/Bar-cal/releases/download/v1.0.0/Bar-cal-1.0.0-macOS-arm64.dmg
 
 Workspace index: [PROJECTS.md](../../PROJECTS.md). Keep its Bar-cal entry
 current when changing the project's purpose or location.
@@ -46,13 +46,12 @@ Shortcuts while the calendar is open:
   Command-,        Settings
   Command-Shift-T  Go to date
 
-Based on Itsycal by Sanjay Madan: https://github.com/sfsam/Itsycal
-MIT licensed; retain LICENSE.txt and the notices in
-Itsycal/ThirdPartyLicenses. The About panel opens the bundled notices.
+MIT licensed; retain the copyright notices in LICENSE.txt and the notices in
+Bar-cal/ThirdPartyLicenses. The About panel opens the bundled notices.
 
 Original Bar-cal artwork and the ChatGPT image-generation prompts are
 saved in Design/Generated/slate-production; compiled app-icon artwork is
-in Itsycal/AppIcon.icon and the template glyph is in the asset catalog.
+in Bar-cal/AppIcon.icon and the template glyph is in the asset catalog.
 
 Automatic updates are disabled. Download updates from GitHub Releases.
 README.md describes the current public release; BUILD.md documents Xcode

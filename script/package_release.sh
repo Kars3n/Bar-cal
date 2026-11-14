@@ -17,7 +17,7 @@ OPTIONS_PATH="$DIST_ROOT/ExportOptions-$RELEASE_VERSION.plist"
 mkdir -p "$DIST_ROOT"
 
 if [[ "$RELEASE_MODE" == build ]]; then
-  xcodebuild -project "$ROOT_DIR/Itsycal.xcodeproj" -scheme Itsycal \
+  xcodebuild -project "$ROOT_DIR/Bar-cal.xcodeproj" -scheme Bar-cal \
     -configuration Release -destination 'generic/platform=macOS' \
     -archivePath "$ARCHIVE_PATH" \
     -derivedDataPath "${TMPDIR:-/tmp}/barcal-release-derived" \

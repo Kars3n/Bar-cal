@@ -1,7 +1,7 @@
 ### Local Development
 
 After configuring `Local.xcconfig`, run `./script/build_and_run.sh` to
-build the Itsycal scheme and open `Bar-cal.app`. The Codex Run action uses
+build the Bar-cal scheme and open `Bar-cal.app`. The Codex Run action uses
 the same script. It installs the development build at
 `/Applications/Bar-cal.app` and launches that copy so macOS 27 and Bartender
 can manage its menu-bar item. `--verify` checks that the built app stays running;
@@ -28,7 +28,7 @@ or closed below it. Vertical-only drags retain collapsed repositioning.
 Run the focused screen-edge placement checks with:
 
 ```sh
-DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun clang -fobjc-arc -framework Cocoa -I Itsycal script/test_edge_geometry.m -o /tmp/barcal-test-edge-geometry
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun clang -fobjc-arc -framework Cocoa -I Bar-cal script/test_edge_geometry.m -o /tmp/barcal-test-edge-geometry
 /tmp/barcal-test-edge-geometry
 ```
 
@@ -38,7 +38,7 @@ window movement and layout. The hidden-window motion regression checks cover
 fresh opens, immediate reversal, cancellation, and reduced motion:
 
 ```sh
-DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun clang -fobjc-arc -framework Cocoa -framework QuartzCore -I Itsycal script/test_edge_motion.m Itsycal/ItsycalWindow.m -o /tmp/barcal-test-edge-motion
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun clang -fobjc-arc -framework Cocoa -framework QuartzCore -I Bar-cal script/test_edge_motion.m Bar-cal/ItsycalWindow.m -o /tmp/barcal-test-edge-motion
 /tmp/barcal-test-edge-motion
 ```
 
@@ -54,7 +54,7 @@ Run the To-do panel regression checks (test doubles, no real reminder access or
 writes, and no visible window) with:
 
 ```sh
-DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun clang -fobjc-arc -framework Cocoa -framework EventKit -I Itsycal -I Itsycal/MoCode script/test_todo_panel.m Itsycal/TodoViewController.m Itsycal/EventCenter.m Itsycal/ReminderRecurrence.m Itsycal/MoCode/MoDate.m Itsycal/Itsycal.m Itsycal/Sizer.m -o /tmp/barcal-test-todo
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun clang -fobjc-arc -framework Cocoa -framework EventKit -I Bar-cal -I Bar-cal/MoCode script/test_todo_panel.m Bar-cal/TodoViewController.m Bar-cal/EventCenter.m Bar-cal/ReminderRecurrence.m Bar-cal/MoCode/MoDate.m Bar-cal/Itsycal.m Bar-cal/Sizer.m -o /tmp/barcal-test-todo
 /tmp/barcal-test-todo
 ```
 

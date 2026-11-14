@@ -24,23 +24,23 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		9242A55C1A82A136005AA4B3 /* Itsycal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bar-cal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9242A55C1A82A136005AA4B3 /* Bar-cal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bar-cal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92CF00001A82A136005AA4B3 /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		92488FE73072079E00E9229D /* Exceptions for "Itsycal" folder in "Itsycal" target */ = {
+		92488FE73072079E00E9229D /* Exceptions for "Bar-cal" folder in "Bar-cal" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Fonts/Mow.otf,
 				Info.plist,
 			);
-			target = 9242A55B1A82A136005AA4B3 /* Itsycal */;
+			target = 9242A55B1A82A136005AA4B3 /* Bar-cal */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		92488FE83072079E00E9229D /* Exceptions for "Itsycal" folder in "Copy Files" phase from "Itsycal" target */ = {
+		92488FE83072079E00E9229D /* Exceptions for "Bar-cal" folder in "Copy Files" phase from "Bar-cal" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			attributesByRelativePath = {
 				Frameworks/MASShortcut.framework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
@@ -52,7 +52,7 @@
 				Frameworks/Sparkle.framework,
 			);
 		};
-		92488FE93072079E00E9229D /* Exceptions for "Itsycal" folder in "Copy Files" phase from "Itsycal" target */ = {
+		92488FE93072079E00E9229D /* Exceptions for "Bar-cal" folder in "Copy Files" phase from "Bar-cal" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = 9291F8AB2AE2126B00E80F14 /* CopyFiles */;
 			membershipExceptions = (
@@ -62,14 +62,14 @@
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		92488FB93072079D00E9229D /* Itsycal */ = {
+		92488FB93072079D00E9229D /* Bar-cal */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				92488FE73072079E00E9229D /* Exceptions for "Itsycal" folder in "Itsycal" target */,
-				92488FE83072079E00E9229D /* Exceptions for "Itsycal" folder in "Copy Files" phase from "Itsycal" target */,
-				92488FE93072079E00E9229D /* Exceptions for "Itsycal" folder in "Copy Files" phase from "Itsycal" target */,
+				92488FE73072079E00E9229D /* Exceptions for "Bar-cal" folder in "Bar-cal" target */,
+				92488FE83072079E00E9229D /* Exceptions for "Bar-cal" folder in "Copy Files" phase from "Bar-cal" target */,
+				92488FE93072079E00E9229D /* Exceptions for "Bar-cal" folder in "Copy Files" phase from "Bar-cal" target */,
 			);
-			path = Itsycal;
+			path = Bar-cal;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -86,7 +86,7 @@
 		9242A5531A82A136005AA4B3 = {
 			isa = PBXGroup;
 			children = (
-				92488FB93072079D00E9229D /* Itsycal */,
+				92488FB93072079D00E9229D /* Bar-cal */,
 				9242A55D1A82A136005AA4B3 /* Products */,
 				92CF00001A82A136005AA4B3 /* Local.xcconfig */,
 			);
@@ -95,7 +95,7 @@
 		9242A55D1A82A136005AA4B3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9242A55C1A82A136005AA4B3 /* Itsycal.app */,
+				9242A55C1A82A136005AA4B3 /* Bar-cal.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,9 +103,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9242A55B1A82A136005AA4B3 /* Itsycal */ = {
+		9242A55B1A82A136005AA4B3 /* Bar-cal */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9242A5791A82A136005AA4B3 /* Build configuration list for PBXNativeTarget "Itsycal" */;
+			buildConfigurationList = 9242A5791A82A136005AA4B3 /* Build configuration list for PBXNativeTarget "Bar-cal" */;
 			buildPhases = (
 				9242A5581A82A136005AA4B3 /* Sources */,
 				9242A5591A82A136005AA4B3 /* Frameworks */,
@@ -117,11 +117,11 @@
 			buildRules = (
 			);
 			fileSystemSynchronizedGroups = (
-				92488FB93072079D00E9229D /* Itsycal */,
+				92488FB93072079D00E9229D /* Bar-cal */,
 			);
-			name = Itsycal;
+			name = Bar-cal;
 			productName = Moon;
-			productReference = 9242A55C1A82A136005AA4B3 /* Itsycal.app */;
+			productReference = 9242A55C1A82A136005AA4B3 /* Bar-cal.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -144,7 +144,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 9242A5571A82A136005AA4B3 /* Build configuration list for PBXProject "Itsycal" */;
+			buildConfigurationList = 9242A5571A82A136005AA4B3 /* Build configuration list for PBXProject "Bar-cal" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -164,7 +164,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9242A55B1A82A136005AA4B3 /* Itsycal */,
+				9242A55B1A82A136005AA4B3 /* Bar-cal */,
 			);
 		};
 /* End PBXProject section */
@@ -196,7 +196,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		9242A5771A82A136005AA4B3 /* Debug configuration for PBXProject "Itsycal" */ = {
+		9242A5771A82A136005AA4B3 /* Debug configuration for PBXProject "Bar-cal" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -255,7 +255,7 @@
 			};
 			name = Debug;
 		};
-		9242A5781A82A136005AA4B3 /* Release configuration for PBXProject "Itsycal" */ = {
+		9242A5781A82A136005AA4B3 /* Release configuration for PBXProject "Bar-cal" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -308,21 +308,21 @@
 			};
 			name = Release;
 		};
-		9242A57A1A82A136005AA4B3 /* Debug configuration for PBXNativeTarget "Itsycal" */ = {
+		9242A57A1A82A136005AA4B3 /* Debug configuration for PBXNativeTarget "Bar-cal" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 92CF00001A82A136005AA4B3 /* Local.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Itsycal/Itsycal.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Bar-cal/Bar-cal.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Itsycal/Frameworks",
+					"$(PROJECT_DIR)/Bar-cal/Frameworks",
 				);
-				INFOPLIST_FILE = Itsycal/Info.plist;
+				INFOPLIST_FILE = Bar-cal/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -334,22 +334,22 @@
 			};
 			name = Debug;
 		};
-		9242A57B1A82A136005AA4B3 /* Release configuration for PBXNativeTarget "Itsycal" */ = {
+		9242A57B1A82A136005AA4B3 /* Release configuration for PBXNativeTarget "Bar-cal" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 92CF00001A82A136005AA4B3 /* Local.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Itsycal/Itsycal.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Bar-cal/Bar-cal.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Itsycal/Frameworks",
+					"$(PROJECT_DIR)/Bar-cal/Frameworks",
 				);
-				INFOPLIST_FILE = Itsycal/Info.plist;
+				INFOPLIST_FILE = Bar-cal/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -364,19 +364,19 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9242A5571A82A136005AA4B3 /* Build configuration list for PBXProject "Itsycal" */ = {
+		9242A5571A82A136005AA4B3 /* Build configuration list for PBXProject "Bar-cal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9242A5771A82A136005AA4B3 /* Debug configuration for PBXProject "Itsycal" */,
-				9242A5781A82A136005AA4B3 /* Release configuration for PBXProject "Itsycal" */,
+				9242A5771A82A136005AA4B3 /* Debug configuration for PBXProject "Bar-cal" */,
+				9242A5781A82A136005AA4B3 /* Release configuration for PBXProject "Bar-cal" */,
 			);
 			defaultConfigurationName = Release;
 		};
-		9242A5791A82A136005AA4B3 /* Build configuration list for PBXNativeTarget "Itsycal" */ = {
+		9242A5791A82A136005AA4B3 /* Build configuration list for PBXNativeTarget "Bar-cal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9242A57A1A82A136005AA4B3 /* Debug configuration for PBXNativeTarget "Itsycal" */,
-				9242A57B1A82A136005AA4B3 /* Release configuration for PBXNativeTarget "Itsycal" */,
+				9242A57A1A82A136005AA4B3 /* Debug configuration for PBXNativeTarget "Bar-cal" */,
+				9242A57B1A82A136005AA4B3 /* Release configuration for PBXNativeTarget "Bar-cal" */,
 			);
 			defaultConfigurationName = Release;
 		};

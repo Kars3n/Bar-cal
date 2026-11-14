@@ -47,7 +47,7 @@ or press Escape to close the drawer. Pin keeps it open when you switch apps.
 
 ## Build
 
-Use Xcode 27.2 or later to build **Bar-cal.app**.
+Open `Bar-cal.xcodeproj` in Xcode 27.2 or later to build **Bar-cal.app**.
 
 ```sh
 cp Local.xcconfig.example Local.xcconfig

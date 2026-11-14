@@ -17,7 +17,7 @@ esac
 
 pkill -f "^$APP_BINARY( |$)" 2>/dev/null || true
 pkill -f "^$BUILD_APP_BUNDLE/Contents/MacOS/Bar-cal( |$)" 2>/dev/null || true
-xcodebuild -project "$ROOT_DIR/Itsycal.xcodeproj" -scheme Itsycal -configuration Debug -derivedDataPath "$DERIVED_DATA" build
+xcodebuild -project "$ROOT_DIR/Bar-cal.xcodeproj" -scheme Bar-cal -configuration Debug -derivedDataPath "$DERIVED_DATA" build
 
 # macOS 27's menu-bar host (and Bartender) needs a stable Applications path.
 # Stage a fresh bundle so removed resources cannot linger across builds.

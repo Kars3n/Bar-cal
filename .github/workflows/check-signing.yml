@@ -3,7 +3,7 @@ name: Check Signing Settings
 on:
   pull_request:
     paths:
-      - 'Itsycal.xcodeproj/project.pbxproj'
+      - 'Bar-cal.xcodeproj/project.pbxproj'
 
 jobs:
   check:
@@ -15,7 +15,7 @@ jobs:
 
       - name: Fail if signing settings were modified
         run: |
-          if git diff origin/${{ github.base_ref }}...HEAD -- Itsycal.xcodeproj/project.pbxproj \
+          if git diff origin/${{ github.base_ref }}...HEAD -- Bar-cal.xcodeproj/project.pbxproj \
             | grep -E '^\+.*(DEVELOPMENT_TEAM|DevelopmentTeam|ProvisioningStyle)'; then
             echo ""
             echo "ERROR: This PR modifies code signing settings in project.pbxproj."
