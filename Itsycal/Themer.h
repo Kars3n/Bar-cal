@@ -11,7 +11,8 @@ extern NSString * const kThemePreference;
 typedef NS_ENUM(NSInteger, ThemePreference) {
     ThemePreferenceSystem = 0,
     ThemePreferenceLight = 1,
-    ThemePreferenceDark  = 2
+    ThemePreferenceDark  = 2,
+    ThemePreferenceSlate = 3
 };
 
 @interface Themer : NSObject

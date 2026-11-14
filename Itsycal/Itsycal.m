@@ -38,6 +38,14 @@ NSString * const kDoNotCheckLoginItemStatus = @"DoNotCheckLoginItemStatus";
 NSString * const kWindowPosition = @"WindowPosition";
 NSString * const kTimerEndDate = @"TimerEndDate";
 NSString * const kTimerRecentMinutes = @"TimerRecentMinutes";
+NSString * const kPresentationMode = @"PresentationMode";
+NSString * const kScreenEdge = @"ScreenEdge";
+NSString * const kEdgeTabPosition = @"EdgeTabPosition";
+NSString * const kEdgeTabDisplay = @"EdgeTabDisplay";
+NSString * const kEdgeTabAnchor = @"EdgeTabAnchor";
+NSString * const kDrawerTabsEnabled = @"DrawerTabsEnabled";
+NSString * const kSelectedDrawerTab = @"SelectedDrawerTab";
+NSString * const kTodoListIdentifier = @"TodoListIdentifier";
 
 @implementation NSDate (HasNoEvents)
 

@@ -12,6 +12,9 @@
 @implementation PrefsGeneralVC
 {
     NSButton *_login;
+    NSPopUpButton *_positionPopup;
+    NSPopUpButton *_edgePopup;
+    NSButton *_drawerTabs;
 }
 
 #pragma mark -
@@ -50,10 +53,11 @@
     [v addSubview:shortcutView];
 
     // Window position label
-    NSTextField *positionLabel = label(NSLocalizedString(@"Window position:", @""));
+    NSTextField *positionLabel = label(NSLocalizedString(@"Menu bar popup:", @""));
 
     // Window position popup
     NSPopUpButton *positionPopup = [NSPopUpButton new];
+    _positionPopup = positionPopup;
     [positionPopup addItemsWithTitles:@[NSLocalizedString(@"Below menu bar icon", @""),
                                         NSLocalizedString(@"Top right of screen", @"")]];
     // The tags will be used to bind the selected window
@@ -63,13 +67,42 @@
     [positionPopup.cell setAccessibilityTitleUIElement:positionLabel.cell];
     [v addSubview:positionPopup];
 
-    MoVFLHelper *vfl = [[MoVFLHelper alloc] initWithSuperview:v metrics:@{@"m": @20} views:NSDictionaryOfVariableBindings(_login, beepBeep, shortcutLabel, shortcutView, positionLabel, positionPopup)];
-    [vfl :@"V:|-m-[_login]-[beepBeep]-m-[shortcutLabel]-3-[shortcutView(25)]-30-[positionPopup]-m-|"];
+    NSTextField *presentationLabel = label(NSLocalizedString(@"Show calendar as:", @""));
+    NSPopUpButton *presentationPopup = [NSPopUpButton new];
+    [presentationPopup addItemsWithTitles:@[NSLocalizedString(@"Menu bar item", @""), NSLocalizedString(@"Screen-edge tab", @"")]];
+    [presentationPopup itemAtIndex:0].tag = BarCalPresentationMenuBar;
+    [presentationPopup itemAtIndex:1].tag = BarCalPresentationScreenEdge;
+    presentationPopup.target = self;
+    presentationPopup.action = @selector(presentationChanged:);
+    [presentationPopup.cell setAccessibilityTitleUIElement:presentationLabel.cell];
+    [v addSubview:presentationPopup];
+
+    NSTextField *edgeLabel = label(NSLocalizedString(@"Screen edge:", @""));
+    NSPopUpButton *edgePopup = [NSPopUpButton new];
+    _edgePopup = edgePopup;
+    [edgePopup addItemsWithTitles:@[NSLocalizedString(@"Right", @""), NSLocalizedString(@"Left", @"")]];
+    [edgePopup itemAtIndex:0].tag = BarCalScreenEdgeRight;
+    [edgePopup itemAtIndex:1].tag = BarCalScreenEdgeLeft;
+    [edgePopup.cell setAccessibilityTitleUIElement:edgeLabel.cell];
+    [v addSubview:edgePopup];
+
+    NSTextField *edgeHint = label(NSLocalizedString(@"Click the edge tab to open or close. Drag it to reposition.", @""));
+    edgeHint.font = [NSFont systemFontOfSize:11];
+    edgeHint.textColor = NSColor.secondaryLabelColor;
+    _drawerTabs = chkbx(NSLocalizedString(@"Show Calendar & To-do tabs", @""));
+    _drawerTabs.toolTip = NSLocalizedString(@"Use two adjacent tabs in one screen-edge drawer. Choose a reminder list inside To-do.", @"");
+
+    MoVFLHelper *vfl = [[MoVFLHelper alloc] initWithSuperview:v metrics:@{@"m": @20} views:NSDictionaryOfVariableBindings(_login, beepBeep, shortcutLabel, shortcutView, presentationLabel, presentationPopup, edgeLabel, edgePopup, edgeHint, _drawerTabs, positionLabel, positionPopup)];
+    [vfl :@"V:|-m-[_login]-[beepBeep]-m-[shortcutLabel]-3-[shortcutView(25)]-m-[presentationPopup]-10-[edgePopup]-8-[edgeHint]-12-[_drawerTabs]-m-[positionPopup]-m-|"];
     [vfl :@"H:|-m-[_login]-(>=m)-|"];
     [vfl :@"H:|-m-[beepBeep]-(>=m)-|"];
     [vfl :@"H:|-(>=m)-[shortcutLabel]-(>=m)-|"];
     [vfl :@"H:|-m-[shortcutView(>=220)]-m-|"];
     [vfl :@"H:|-m-[positionLabel]-[positionPopup]-(>=m)-|" :NSLayoutFormatAlignAllFirstBaseline];
+    [vfl :@"H:|-m-[presentationLabel]-[presentationPopup]-(>=m)-|" :NSLayoutFormatAlignAllFirstBaseline];
+    [vfl :@"H:|-m-[edgeLabel]-[edgePopup]-(>=m)-|" :NSLayoutFormatAlignAllFirstBaseline];
+    [vfl :@"H:|-m-[edgeHint]-(>=m)-|"];
+    [vfl :@"H:|-m-[_drawerTabs]-(>=m)-|"];
 
     // Center shortcutLabel
     [v addConstraint:[NSLayoutConstraint constraintWithItem:shortcutLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:v attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
@@ -79,6 +112,10 @@
 
     // Bindings for window position
     [positionPopup bind:@"selectedTag" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:kWindowPosition] options:@{NSContinuouslyUpdatesValueBindingOption: @(YES)}];
+    [presentationPopup bind:@"selectedTag" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:kPresentationMode] options:@{NSContinuouslyUpdatesValueBindingOption: @YES}];
+    [edgePopup bind:@"selectedTag" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:kScreenEdge] options:@{NSContinuouslyUpdatesValueBindingOption: @YES}];
+    [_drawerTabs bind:@"value" toObject:NSUserDefaultsController.sharedUserDefaultsController withKeyPath:[@"values." stringByAppendingString:kDrawerTabsEnabled] options:@{NSContinuouslyUpdatesValueBindingOption: @YES}];
+
 
     self.view = v;
 }
@@ -86,6 +123,7 @@
 - (void)viewWillAppear
 {
     [super viewWillAppear];
+    [self updatePresentationControls:[NSUserDefaults.standardUserDefaults integerForKey:kPresentationMode]];
 
     // The API used to check the login item's state (LSSharedFileList) causes
     // errors for users who have network drives but are not connected to their
@@ -98,6 +136,22 @@
     else {
         _login.hidden = YES;
     }
+}
+
+#pragma mark -
+#pragma mark Presentation
+
+- (void)presentationChanged:(NSPopUpButton *)popup
+{
+    [self updatePresentationControls:popup.selectedTag];
+}
+
+- (void)updatePresentationControls:(NSInteger)mode
+{
+    BOOL screenEdge = mode == BarCalPresentationScreenEdge;
+    _edgePopup.enabled = screenEdge;
+    _positionPopup.enabled = !screenEdge;
+    _drawerTabs.enabled = screenEdge;
 }
 
 #pragma mark -

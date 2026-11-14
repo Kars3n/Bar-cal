@@ -52,6 +52,7 @@
 
 - (void)setIsToday:(BOOL)isToday {
     _isToday = isToday;
+    [self updateTextColor];
     [self setNeedsDisplay:YES];
 }
 
@@ -88,7 +89,19 @@
 }
 
 - (void)updateTextColor {
-    self.textField.textColor = self.isInCurrentMonth ? Theme.currentMonthTextColor : Theme.noncurrentMonthTextColor;
+    if (self.isToday) {
+        self.textField.textColor = [NSColor colorWithName:nil dynamicProvider:^NSColor *(NSAppearance *appearance) {
+            return Theme.themePreference == ThemePreferenceSlate ? NSColor.whiteColor : Theme.currentMonthTextColor;
+        }];
+    } else {
+        self.textField.textColor = self.isInCurrentMonth ? Theme.currentMonthTextColor : Theme.noncurrentMonthTextColor;
+    }
+}
+
+- (void)viewDidChangeEffectiveAppearance
+{
+    [super viewDidChangeEffectiveAppearance];
+    [self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -96,10 +109,11 @@
     CGFloat radius = SizePref.cellRadius;
     if (self.isToday) {
         [Theme.todayCellColor set];
-        NSRect r = NSInsetRect(self.bounds, 3, 3);
+        BOOL filled = Theme.themePreference == ThemePreferenceSlate;
+        NSRect r = NSInsetRect(self.bounds, filled ? 1.5 : 3, filled ? 1.5 : 3);
         NSBezierPath *p = [NSBezierPath bezierPathWithRoundedRect:r xRadius:radius yRadius:radius];
         [p setLineWidth:2];
-        [p stroke];
+        if (filled) [p fill]; else [p stroke];
     }
     else if (self.isSelected) {
         [Theme.selectedCellColor set];

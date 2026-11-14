@@ -75,6 +75,9 @@ static const CGFloat kReminderFillGap = 1;
     NSPopover *_popover;
     EventInfo *_popoverEventInfo; // event shown in _popover
     BOOL _flashScrollers; // after the next layout, if the agenda scrolls
+    NSStackView *_emptyState;
+    NSTextField *_emptyLabel;
+    NSButton *_chooseCalendars;
 }
 
 - (void)loadView
@@ -110,6 +113,25 @@ static const CGFloat kReminderFillGap = 1;
     [v addSubview:tvContainer];
     [v addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tv]|" options:0 metrics:nil views:@{@"tv": tvContainer}]];
     [v addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tv]|" options:0 metrics:nil views:@{@"tv": tvContainer}]];
+
+    _emptyLabel = [NSTextField wrappingLabelWithString:@""];
+    _emptyLabel.font = [NSFont systemFontOfSize:11];
+    _emptyLabel.textColor = Theme.agendaDayTextColor;
+    _emptyLabel.alignment = NSTextAlignmentCenter;
+    _chooseCalendars = [NSButton buttonWithTitle:NSLocalizedString(@"Choose Calendars…", @"") target:self action:@selector(chooseCalendars:)];
+    _chooseCalendars.bezelStyle = NSBezelStyleRounded;
+    _chooseCalendars.controlSize = NSControlSizeSmall;
+    _emptyState = [NSStackView stackViewWithViews:@[_emptyLabel, _chooseCalendars]];
+    _emptyState.orientation = NSUserInterfaceLayoutOrientationVertical;
+    _emptyState.spacing = 6;
+    _emptyState.translatesAutoresizingMaskIntoConstraints = NO;
+    _emptyState.hidden = YES;
+    [v addSubview:_emptyState];
+    [NSLayoutConstraint activateConstraints:@[
+        [_emptyState.centerXAnchor constraintEqualToAnchor:v.centerXAnchor],
+        [_emptyState.centerYAnchor constraintEqualToAnchor:v.centerYAnchor],
+        [_emptyLabel.widthAnchor constraintEqualToAnchor:v.widthAnchor constant:-24],
+    ]];
     
     self.view = v;
 }
@@ -125,10 +147,16 @@ static const CGFloat kReminderFillGap = 1;
     // Calculate height of view based on _tv row heights.
     // We set the view's height using preferredContentSize.
     NSInteger rows = [_tv numberOfRows];
+    BOOL showsEmptyState = rows == 0 && self.emptyStateMessage.length > 0;
+    _emptyState.hidden = !showsEmptyState;
+    _tv.enclosingScrollView.hidden = showsEmptyState;
+    _emptyLabel.stringValue = self.emptyStateMessage ?: @"";
+    _chooseCalendars.hidden = !self.offersCalendarSelection;
     CGFloat height = 0;
     for (NSInteger row = 0; row < rows; ++row) {
         height += [self tableView:_tv heightOfRow:row];
     }
+    if (showsEmptyState) height = self.offersCalendarSelection ? 72 : 40;
     if ([self.identifier isEqualToString:@"AgendaVC"]) {
         // Limit height so everything fits on the screen.
         CGFloat maxHeight = [self.delegate agendaMaxPossibleHeight];
@@ -168,7 +196,14 @@ static const CGFloat kReminderFillGap = 1;
 - (void)setPreferredContentSizeHack:(NSValue *)value
 {
     // See -viewDidLayout for why this is done here.
-    self.preferredContentSize = value.sizeValue;
+    if (!NSEqualSizes(self.preferredContentSize, value.sizeValue)) self.preferredContentSize = value.sizeValue;
+}
+
+- (void)chooseCalendars:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(agendaWantsToChooseCalendars)]) {
+        [self.delegate agendaWantsToChooseCalendars];
+    }
 }
 
 - (void)updateViewConstraints
@@ -461,14 +496,16 @@ static const CGFloat kReminderFillGap = 1;
     dispatch_once(&onceToken, ^{
         eventCell = [AgendaEventCell new];
         dateCell = [AgendaDateCell new];
-        dateCell.frame = NSMakeRect(0, 0, NSWidth(self->_tv.frame), 999); // only width is important here
         dateCell.dayTextField.integerValue = 21;
     });
-    
+    // NSTableView's frame getter can tile the table and ask for row heights
+    // again. Read the column width instead, including on first measurement.
+    CGFloat width = tableView.tableColumns.firstObject.width;
+    dateCell.frame = NSMakeRect(0, 0, width, 999);
     CGFloat height = dateCell.fittingSize.height;
     id obj = self.events[row];
     if ([obj isKindOfClass:[EventInfo class]]) {
-        eventCell.frame = NSMakeRect(0, 0, NSWidth(_tv.frame), 999); // only width is important here
+        eventCell.frame = NSMakeRect(0, 0, width, 999);
         [self populateEventCell:eventCell withInfo:obj];
         height = eventCell.fittingSize.height;
     }

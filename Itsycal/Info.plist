@@ -46,13 +46,13 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSAppleEventsUsageDescription</key>
-	<string>Itsycal uses AppleEvents to open your calendar app to the selected day. You can change this setting in System Settings › Privacy &amp; Security › Automation</string>
+	<string>Bar-cal uses AppleEvents to open your calendar app to the selected day. You can change this setting in System Settings › Privacy &amp; Security › Automation</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>Itsycal is more useful when it can display events from your calendars. You can change this setting in System Settings › Privacy &amp; Security › Calendars</string>
+	<string>Bar-cal is more useful when it can display events from your calendars. You can change this setting in System Settings › Privacy &amp; Security › Calendars</string>
 	<key>NSRemindersFullAccessUsageDescription</key>
-	<string>Itsycal can display your reminders alongside your events. You can change this setting in System Settings › Privacy &amp; Security › Reminders</string>
+	<string>Bar-cal can display your reminders alongside your events. You can change this setting in System Settings › Privacy &amp; Security › Reminders</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>© 2012 − 2026 mowglii.com</string>
+	<string>© 2026 Kars3n. Based on Itsycal © Sanjay Madan.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

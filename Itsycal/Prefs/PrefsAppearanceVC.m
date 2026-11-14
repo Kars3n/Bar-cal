@@ -56,8 +56,9 @@
     // Theme popup. Each name includes "Theme" so the popup needs no label.
     NSPopUpButton *themePopup = popup(@[NSLocalizedString(@"System Theme", @"System theme name"),
                                         NSLocalizedString(@"Light Theme", @"Light theme name"),
-                                        NSLocalizedString(@"Dark Theme", @"Dark theme name")],
-                                      @[@(ThemePreferenceSystem), @(ThemePreferenceLight), @(ThemePreferenceDark)],
+                                        NSLocalizedString(@"Dark Theme", @"Dark theme name"),
+                                        NSLocalizedString(@"Slate Theme", @"Bar-cal graphite theme name")],
+                                      @[@(ThemePreferenceSystem), @(ThemePreferenceLight), @(ThemePreferenceDark), @(ThemePreferenceSlate)],
                                       kThemePreference);
 
     // Size segmented control. Each segment shows "Aa" at the font
@@ -103,10 +104,14 @@
     NSArray<NSString *> *iconNames = @[NSLocalizedString(@"Filled date", @"Accessibility description for menu bar icon with the date in a filled square"),
                                        NSLocalizedString(@"Outlined date", @"Accessibility description for menu bar icon with the date in an outlined square"),
                                        NSLocalizedString(@"Calendar grid", @"Accessibility description for menu bar icon showing a grid of days"),
-                                       NSLocalizedString(@"Itsycal face", @"Accessibility description for menu bar icon showing the Itsycal face")];
+                                       NSLocalizedString(@"Slate mark", @"Accessibility description for Bar-cal's two-bar menu icon")];
     NSMutableArray<NSImage *> *iconImages = [NSMutableArray new];
     for (NSInteger i = 0; i < iconNames.count; i++) {
-        NSImage *image = [[NSImage imageNamed:[NSString stringWithFormat:@"menubaricon%ld", i]] copy];
+        NSImage *image;
+        if (i == 3) image = [[NSImage imageNamed:@"SlateMark"] copy];
+        else if (i == 2) image = [NSImage imageWithSystemSymbolName:@"calendar" accessibilityDescription:nil];
+        else image = [[NSImage imageNamed:[NSString stringWithFormat:@"menubaricon%ld", i]] copy];
+        image.size = NSMakeSize(18, 18);
         image.accessibilityDescription = iconNames[i];
         [iconImages addObject:image];
     }

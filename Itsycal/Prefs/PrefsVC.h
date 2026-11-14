@@ -12,5 +12,6 @@
 
 // Show General panel if About panel is showing.
 - (void)showPrefs;
+- (void)showEvents;
 
 @end

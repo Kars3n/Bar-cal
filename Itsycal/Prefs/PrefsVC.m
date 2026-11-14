@@ -5,6 +5,7 @@
 
 #import "PrefsVC.h"
 #import "PrefsAboutVC.h"
+#import "PrefsEventsVC.h"
 
 @implementation PrefsVC
 {
@@ -84,6 +85,14 @@
     }];
 }
 
+- (void)showEvents
+{
+    NSUInteger index = [self.childViewControllers indexOfObjectPassingTest:^BOOL(NSViewController *vc, NSUInteger idx, BOOL *stop) {
+        return [vc isKindOfClass:PrefsEventsVC.class];
+    }];
+    if (index != NSNotFound) [self selectTabAtIndex:index];
+}
+
 - (void)selectTabAtIndex:(NSInteger)index
 {
     NSString *identifier = _toolbarIdentifiers[index];
@@ -122,6 +131,7 @@
     if (toVC == nil) return;
 
     _selectedItemTag = item.tag;
+    _toolbar.selectedItemIdentifier = item.itemIdentifier;
 
     NSWindow *window = self.view.window;
     NSRect contentRect = NSMakeRect(0, 0, _contentWidth, toVC.view.fittingSize.height);
@@ -164,7 +174,9 @@
 {
     NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
     item.label = itemIdentifier;
-    item.image = [NSImage imageNamed:NSStringFromClass([[self viewControllerForItemIdentifier:itemIdentifier] class])];
+    NSDictionary *symbols = @{@"PrefsGeneralVC": @"slider.horizontal.3", @"PrefsEventsVC": @"calendar", @"PrefsAppearanceVC": @"paintpalette", @"PrefsAboutVC": @"info.circle"};
+    NSString *className = NSStringFromClass([[self viewControllerForItemIdentifier:itemIdentifier] class]);
+    item.image = [NSImage imageWithSystemSymbolName:symbols[className] accessibilityDescription:itemIdentifier];
     item.target = self;
     item.action = @selector(toolbarItemClicked:);
     item.tag = [_toolbarIdentifiers indexOfObject:itemIdentifier];

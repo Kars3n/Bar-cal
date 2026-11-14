@@ -131,7 +131,7 @@
 {
     NSString *urlString = (self.urlString) ? self.urlString : self.stringValue;
     NSURL *url;
-    if ([urlString hasPrefix:@"http://"] || [urlString hasPrefix:@"https://"]) {
+    if ([urlString hasPrefix:@"http://"] || [urlString hasPrefix:@"https://"] || [urlString hasPrefix:@"file://"]) {
         url = [NSURL URLWithString:urlString];
     }
     else {

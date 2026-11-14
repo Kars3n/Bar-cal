@@ -17,6 +17,7 @@ static const CGFloat kVerticalPadding = 11;
 
 @interface ItsycalWindowFrameView : NSView
 @property (nonatomic, assign) CGFloat arrowMidX;
+@property (nonatomic) BOOL drawsArrow;
 @end
 
 #pragma mark -
@@ -27,6 +28,13 @@ static const CGFloat kVerticalPadding = 11;
 // =========================================================================
 
 @implementation ItsycalWindow
+{
+    NSView *_slidingContent;
+    ItsycalWindowFrameView *_calendarFrame;
+    NSView *_edgeHandle;
+    NSLayoutConstraint *_bodyLeading;
+    NSLayoutConstraint *_bodyTrailing;
+}
 
 - (id)init
 {
@@ -39,11 +47,30 @@ static const CGFloat kVerticalPadding = 11;
         [self setCollectionBehavior:NSWindowCollectionBehaviorMoveToActiveSpace];
         // Fade out when -[NSWindow orderOut:] is called.
         [self setAnimationBehavior:NSWindowAnimationBehaviorUtilityWindow];
-        // The frame view draws the window. Its safe area excludes
-        // the arrow and padding, so views placed in the window should
-        // be constrained to its safeAreaLayoutGuide. The system draws
-        // the window's shadow around the frame view's shape.
-        [self setContentView:[ItsycalWindowFrameView new]];
+        // The stationary host clips a single moving surface to this display.
+        // Calendar and notch share one compositor animation, with no per-frame
+        // window movement or Auto Layout work.
+        NSView *host = [NSView new];
+        host.wantsLayer = YES;
+        _slidingContent = [NSView new];
+        _slidingContent.translatesAutoresizingMaskIntoConstraints = NO;
+        _slidingContent.wantsLayer = YES;
+        [host addSubview:_slidingContent];
+        _calendarFrame = [ItsycalWindowFrameView new];
+        _calendarFrame.translatesAutoresizingMaskIntoConstraints = NO;
+        [_slidingContent addSubview:_calendarFrame];
+        _bodyLeading = [_calendarFrame.leadingAnchor constraintEqualToAnchor:_slidingContent.leadingAnchor];
+        _bodyTrailing = [_calendarFrame.trailingAnchor constraintEqualToAnchor:_slidingContent.trailingAnchor];
+        [NSLayoutConstraint activateConstraints:@[
+            [_slidingContent.leadingAnchor constraintEqualToAnchor:host.leadingAnchor],
+            [_slidingContent.trailingAnchor constraintEqualToAnchor:host.trailingAnchor],
+            [_slidingContent.topAnchor constraintEqualToAnchor:host.topAnchor],
+            [_slidingContent.bottomAnchor constraintEqualToAnchor:host.bottomAnchor],
+            _bodyLeading, _bodyTrailing,
+            [_calendarFrame.topAnchor constraintEqualToAnchor:_slidingContent.topAnchor],
+            [_calendarFrame.bottomAnchor constraintEqualToAnchor:_slidingContent.bottomAnchor],
+        ]];
+        self.contentView = host;
     }
     return self;
 }
@@ -51,6 +78,84 @@ static const CGFloat kVerticalPadding = 11;
 - (BOOL)canBecomeMainWindow
 {
     return NO;
+}
+
+- (void)setScreenEdgeMode:(BOOL)screenEdgeMode
+{
+    _screenEdgeMode = screenEdgeMode;
+    _calendarFrame.drawsArrow = !screenEdgeMode;
+    _calendarFrame.additionalSafeAreaInsets = NSEdgeInsetsMake(kVerticalPadding + (screenEdgeMode ? 0 : kArrowHeight), 0, kVerticalPadding, 0);
+    self.contentView.layer.masksToBounds = screenEdgeMode;
+    _edgeHandle.hidden = !screenEdgeMode;
+    [self updateEdgeInsets];
+    [_calendarFrame setNeedsLayout:YES];
+}
+
+- (NSView *)calendarContentView { return _calendarFrame; }
+
+- (void)setScreenEdgeOnLeft:(BOOL)screenEdgeOnLeft
+{
+    _screenEdgeOnLeft = screenEdgeOnLeft;
+    [self updateEdgeInsets];
+}
+
+- (void)updateEdgeInsets
+{
+    CGFloat inset = MAX(0, NSWidth(_edgeHandle.frame) - 1);
+    _bodyLeading.constant = self.screenEdgeMode && !self.screenEdgeOnLeft ? inset : 0;
+    _bodyTrailing.constant = self.screenEdgeMode && self.screenEdgeOnLeft ? -inset : 0;
+}
+
+- (void)setEdgeHandleView:(NSView *)view
+{
+    [_edgeHandle removeFromSuperview];
+    _edgeHandle = view;
+    [_slidingContent addSubview:view positioned:NSWindowAbove relativeTo:_calendarFrame];
+    view.hidden = !self.screenEdgeMode;
+    [self updateEdgeInsets];
+}
+
+- (void)setEdgeHandleFrame:(NSRect)frame { _edgeHandle.frame = frame; }
+
+- (CGFloat)edgeRevealOffset
+{
+    // A hidden window can retain an old presentation layer. Only consult it
+    // while an animation is active; a fresh reveal starts at its model offset.
+    CABasicAnimation *slide = (CABasicAnimation *)[_slidingContent.layer animationForKey:@"EdgeReveal"];
+    if (slide) {
+        CALayer *visible = _slidingContent.layer.presentationLayer;
+        return visible ? visible.transform.m41 : [slide.fromValue doubleValue];
+    }
+    return _slidingContent.layer.transform.m41;
+}
+
+- (void)setEdgeRevealOffset:(CGFloat)offset
+{
+    [_slidingContent.layer removeAnimationForKey:@"EdgeReveal"];
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    _slidingContent.layer.transform = CATransform3DMakeTranslation(offset, 0, 0);
+    [CATransaction commit];
+}
+
+- (void)animateEdgeRevealTo:(CGFloat)offset duration:(NSTimeInterval)duration completion:(void (^)(void))completion
+{
+    CGFloat current = self.edgeRevealOffset;
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    [CATransaction setCompletionBlock:completion];
+    _slidingContent.layer.transform = CATransform3DMakeTranslation(offset, 0, 0);
+    if (duration > 0) {
+        CABasicAnimation *slide = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+        slide.fromValue = @(current);
+        slide.toValue = @(offset);
+        slide.duration = duration;
+        slide.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.22 :1 :0.36 :1];
+        [_slidingContent.layer addAnimation:slide forKey:@"EdgeReveal"];
+    } else {
+        [_slidingContent.layer removeAnimationForKey:@"EdgeReveal"];
+    }
+    [CATransaction commit];
 }
 
 - (BOOL)canBecomeKeyWindow
@@ -89,8 +194,7 @@ static const CGFloat kVerticalPadding = 11;
     [self setFrameTopLeftPoint:NSMakePoint(x, y)];
 
     // Tell the frame view where to draw the arrow.
-    ItsycalWindowFrameView *frameView = (ItsycalWindowFrameView *)self.contentView;
-    frameView.arrowMidX = NSMidX([self convertRectFromScreen:rect]);
+    _calendarFrame.arrowMidX = NSMidX([self convertRectFromScreen:rect]);
     
     [self invalidateShadow];
 }
@@ -108,6 +212,7 @@ static const CGFloat kVerticalPadding = 11;
 {
     CALayer *_bodyMask;
     CAShapeLayer *_arrowMask;
+    CALayer *_bodyBorder;
 }
 
 - (instancetype)initWithFrame:(NSRect)frameRect
@@ -115,6 +220,7 @@ static const CGFloat kVerticalPadding = 11;
     self = [super initWithFrame:frameRect];
     if (self) {
         self.wantsLayer = YES;
+        _drawsArrow = YES;
         self.additionalSafeAreaInsets = NSEdgeInsetsMake(kArrowHeight + kVerticalPadding, 0, kVerticalPadding, 0);
 
         // The window's shape is a rounded body with a little arrow at
@@ -129,6 +235,10 @@ static const CGFloat kVerticalPadding = 11;
         _arrowMask.fillColor = NSColor.blackColor.CGColor;
         [_bodyMask addSublayer:_arrowMask];
         self.layer.mask = _bodyMask;
+        _bodyBorder = [CALayer layer];
+        _bodyBorder.cornerRadius = kCornerRadius;
+        _bodyBorder.cornerCurve = kCACornerCurveContinuous;
+        [self.layer addSublayer:_bodyBorder];
     }
     return self;
 }
@@ -153,6 +263,8 @@ static const CGFloat kVerticalPadding = 11;
 - (void)updateLayer
 {
     self.layer.backgroundColor = Theme.mainBackgroundColor.CGColor;
+    _bodyBorder.borderWidth = Theme.themePreference == ThemePreferenceSlate ? 0.5 : 0;
+    _bodyBorder.borderColor = [NSColor colorWithWhite:0.43 alpha:1].CGColor;
 }
 
 - (void)updateMask
@@ -161,8 +273,9 @@ static const CGFloat kVerticalPadding = 11;
     [CATransaction setDisableActions:YES];
 
     NSRect bodyRect = self.bounds;
-    bodyRect.size.height -= kArrowHeight;
+    bodyRect.size.height -= self.drawsArrow ? kArrowHeight : 0;
     _bodyMask.frame = bodyRect;
+    _bodyBorder.frame = NSInsetRect(bodyRect, 0.25, 0.25);
 
     // Add the arrow to the body if its right edge is inside
     // the right edge of the body (taking into account the corner
@@ -177,7 +290,7 @@ static const CGFloat kVerticalPadding = 11;
     CGFloat arrowRightEdge = arrowMidX + curveOffset + kArrowHeight;
     CGFloat bodyRightEdge = NSMaxX(bodyRect) - kCornerRadius;
     NSBezierPath *arrowPath = [NSBezierPath bezierPath];
-    if (arrowRightEdge < bodyRightEdge) {
+    if (self.drawsArrow && arrowRightEdge < bodyRightEdge) {
         CGFloat x = arrowMidX - kArrowHeight - curveOffset;
         CGFloat y = NSHeight(bodyRect);
         [arrowPath moveToPoint:NSMakePoint(x, y)];

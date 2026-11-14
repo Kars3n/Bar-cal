@@ -13,6 +13,7 @@
 #import "EventCenter.h"
 #import "Itsycal.h"
 #import "ReminderRecurrence.h"
+#import "TodoOrdering.h"
 
 // NSUserDefaults key for array of selected calendar IDs.
 static NSString *kSelectedCalendars = @"SelectedCalendars";
@@ -174,6 +175,39 @@ static EventMaker EventMakerForEvent(EKEvent *event); // see below
 - (NSString *)defaultCalendarIdentifier {
     EKCalendar *cal = [_store defaultCalendarForNewEvents];
     return cal.calendarIdentifier;
+}
+
+- (void)fetchTodoList:(NSString *)identifier completion:(void (^)(NSArray<EventInfo *> *, NSError *))completion
+{
+    dispatch_async(_queueWork, ^{
+        EKCalendar *list = self.remindersAuthorizationStatus == EKAuthorizationStatusFullAccess
+            ? [self->_store calendarWithIdentifier:identifier] : nil;
+        if (!list || !(list.allowedEntityTypes & EKEntityMaskReminder)) {
+            NSError *error = [NSError errorWithDomain:@"BarCalTodo" code:1 userInfo:@{
+                NSLocalizedDescriptionKey: NSLocalizedString(@"This reminder list is unavailable. Choose another list.", @"")
+            }];
+            dispatch_async(dispatch_get_main_queue(), ^{ completion(@[], error); });
+            return;
+        }
+        NSPredicate *predicate = [self->_store predicateForIncompleteRemindersWithDueDateStarting:nil ending:nil calendars:@[list]];
+        NSArray<EKReminder *> *reminders = [self _fetchRemindersMatchingPredicate:predicate];
+        NSMutableArray<EventInfo *> *items = [NSMutableArray new];
+        for (EKReminder *reminder in reminders) {
+            if (reminder.isCompleted) continue;
+            EventInfo *info = [EventInfo new];
+            BOOL hasTime = NO;
+            info.reminder = reminder;
+            info.dueDate = DueDateForReminder(reminder, &hasTime, NULL);
+            info.isAllDay = !hasTime;
+            [items addObject:info];
+        }
+        [items sortUsingComparator:^NSComparisonResult(EventInfo *a, EventInfo *b) {
+            NSComparisonResult result = BarCalCompareTodos(a.dueDate, a.reminder.priority, a.reminder.title,
+                                                          b.dueDate, b.reminder.priority, b.reminder.title);
+            return result == NSOrderedSame ? [a.reminder.calendarItemIdentifier compare:b.reminder.calendarItemIdentifier] : result;
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{ completion(items.copy, nil); });
+    });
 }
 
 - (EKEvent *)newEvent {

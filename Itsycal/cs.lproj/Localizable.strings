@@ -26,7 +26,7 @@
 "15 minutes before" = "15 minut předem";
 "30 minutes before" = "30 minut předem";
 "31 days" = "31 dnů";
-"About Itsycal" = "O aplikaci Itsycal";
+"About Bar-cal" = "O aplikaci Bar-cal";
 /* About prefs tab label */
 "About" = "O aplikaci";
 "Add Location or Video Call" = "Přidejte místo nebo videohovor";
@@ -44,9 +44,9 @@
 "Calendar" = "Kalendář";
 "Calendar access denied.
 
-Itsycal is more useful when it can display events from your calendars. You can change this setting in System Settings › Privacy & Security › Calendars" = "Přístup ke kalendáři byl odepřen.
+Bar-cal is more useful when it can display events from your calendars. You can change this setting in System Settings › Privacy & Security › Calendars" = "Přístup ke kalendáři byl odepřen.
 
-Itsycal je užitečnější, pokud může zobrazovat události z vašich kalendářů. Toto nastavení můžete změnit v Nastavení systému › Soukromí a zabezpečení › Kalendáře";
+Bar-cal je užitečnější, pokud může zobrazovat události z vašich kalendářů. Toto nastavení můžete změnit v Nastavení systému › Soukromí a zabezpečení › Kalendáře";
 "Calendar access was denied." = "Přístup ke kalendáři byl odepřen.";
 /* Accessibility description for menu bar icon showing a grid of days */
 "Calendar grid" = "Mřížka kalendáře";
@@ -94,15 +94,15 @@ Itsycal je užitečnější, pokud může zobrazovat události z vašich kalend
 "Help…" = "Nápověda…";
 "Hide icon" = "Skrýt ikonu";
 "Highlight:" = "Zvýraznit:";
-"Itsycal cannot create a new event unless there is at least one calendar you have permission to modify." = "Itsycal nemůže vytvořit novou událost, pokud nemáte oprávnění k úpravám alespoň v jednom kalendáři.";
+"Bar-cal cannot create a new event unless there is at least one calendar you have permission to modify." = "Bar-cal nemůže vytvořit novou událost, pokud nemáte oprávnění k úpravám alespoň v jednom kalendáři.";
 /* Accessibility description for menu bar icon showing the Itsycal face */
-"Itsycal face" = "Obličej Itsycal";
-"Itsycal is more useful when you allow it to add events to your calendars. You can change this setting in System Settings › Privacy & Security › Calendars." = "Itsycal je užitečnější, pokud mu povolíte přidávat události do vašich kalendářů. Toto nastavení můžete změnit v Nastavení systému › Soukromí a zabezpečení › Kalendáře.";
-"Itsycal must be run from the Applications folder in order to work properly.
+"Bar-cal face" = "Obličej Bar-cal";
+"Bar-cal is more useful when you allow it to add events to your calendars. You can change this setting in System Settings › Privacy & Security › Calendars." = "Bar-cal je užitečnější, pokud mu povolíte přidávat události do vašich kalendářů. Toto nastavení můžete změnit v Nastavení systému › Soukromí a zabezpečení › Kalendáře.";
+"Bar-cal must be run from the Applications folder in order to work properly.
 
-Please quit Itsycal, move it to the Applications folder, and relaunch." = "Má-li Itsycal fungovat správně, je nutné jej spustit ze složky „Aplikace“.
+Please quit Bar-cal, move it to the Applications folder, and relaunch." = "Má-li Bar-cal fungovat správně, je nutné jej spustit ze složky „Aplikace“.
 
-Ukončete prosím Itsycal, přesuňte jej do složky „Aplikace“ a znovu jej spusťte.";
+Ukončete prosím Bar-cal, přesuňte jej do složky „Aplikace“ a znovu jej spusťte.";
 /* Button in the event popover that joins the event's video meeting (Zoom, Teams, etc.) */
 "Join" = "Připojit";
 "Keyboard shortcut" = "Klávesová zkratka";
@@ -121,7 +121,7 @@ Ukončete prosím Itsycal, přesuňte jej do složky „Aplikace“ a znovu jej
 /* Accessibility label for menu bar icon picker */
 "Menu bar icon" = "Ikona v řádku nabídek";
 "Monday" = "pondělí";
-"Move Itsycal to the Applications folder" = "Přesuňte Itsycal do složky Aplikace";
+"Move Bar-cal to the Applications folder" = "Přesuňte Bar-cal do složky Aplikace";
 /* Repeat ends never */
 "Never" = "Nikdy";
 "New Event" = "Nová událost";
@@ -141,10 +141,10 @@ Ukončete prosím Itsycal, přesuňte jej do složky „Aplikace“ a znovu jej
 /* Heading of the agenda's section of overdue reminders */
 "Overdue" = "Po termínu";
 /* Tooltip for the pin button, which keeps Itsycal's window open */
-"Pin Itsycal" = "Přišpendlit Itsycal";
+"Pin Bar-cal" = "Přišpendlit Bar-cal";
 /* Tooltip for the calendar's button that shows the previous month */
 "Previous Month" = "Předchozí měsíc";
-"Quit Itsycal" = "Ukončit Itsycal";
+"Quit Bar-cal" = "Ukončit Bar-cal";
 /* Heading in Settings before reminders access is granted */
 "Reminders" = "Připomínky";
 "Reminders access denied. You can change this setting in System Settings › Privacy & Security › Reminders" = "Přístup k připomínkám byl odepřen. Toto nastavení můžete změnit v Nastavení systému › Soukromí a zabezpečení › Připomínky";
@@ -189,7 +189,7 @@ Ukončete prosím Itsycal, přesuňte jej do složky „Aplikace“ a znovu jej
 "Top right of screen" = "Vpravo nahoře na obrazovce";
 "Tuesday" = "úterý";
 /* Tooltip for the pin button while Itsycal is pinned */
-"Unpin Itsycal" = "Odšpendlit Itsycal";
+"Unpin Bar-cal" = "Odšpendlit Bar-cal";
 "Use colored dots" = "Používat barevné tečky";
 "Wednesday" = "středa";
 "Window position:" = "Umístění okna:";

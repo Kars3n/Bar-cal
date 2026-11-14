@@ -35,7 +35,8 @@ static const CFTimeInterval kSnapDuration = 0.15;
     MoCalGrid *_dateGrid;
     MoCalGrid *_weekGrid;
     MoCalGrid *_dowGrid;
-    MoButton *_btnPrev, *_btnNext, *_btnToday;
+    MoButton *_btnPrev, *_btnNext;
+    NSButton *_btnToday;
     NSLayoutConstraint *_weeksConstraint;
     __weak MoCalCell *_hoveredCell;
     __weak MoCalCell *_selectedCell;
@@ -91,8 +92,10 @@ static const CFTimeInterval kSnapDuration = 0.15;
     // Convenience function to make buttons.
     MoButton* (^btn)(NSString*, SEL) = ^MoButton* (NSString *imageName, SEL action) {
         MoButton *btn = [MoButton new];
-        [btn setImage:[NSImage imageNamed:imageName]];
-        [btn setAlternateImage:[NSImage imageNamed:[imageName stringByAppendingString:@"Alt"]]];
+        NSString *symbol = [imageName isEqualToString:@"btnPrev"] ? @"arrowtriangle.left.fill" : @"arrowtriangle.right.fill";
+        NSImage *image = [[NSImage imageWithSystemSymbolName:symbol accessibilityDescription:nil] imageWithSymbolConfiguration:[NSImageSymbolConfiguration configurationWithPointSize:9 weight:NSFontWeightRegular]];
+        image.size = NSMakeSize(18, 18);
+        [btn setImage:image];
         [btn setContentTintColor:Theme.buttonTintColor];
         [btn setTarget:self];
         [btn setAction:action];
@@ -100,7 +103,10 @@ static const CFTimeInterval kSnapDuration = 0.15;
         return btn;
     };
     _btnPrev  = btn(@"btnPrev",  @selector(showPreviousMonth:));
-    _btnToday = btn(@"btnToday", @selector(showTodayMonth:));
+    _btnToday = [NSButton buttonWithTitle:NSLocalizedString(@"Today", @"") target:self action:@selector(showTodayMonth:)];
+    _btnToday.bezelStyle = NSBezelStyleInline;
+    _btnToday.font = [NSFont systemFontOfSize:11 weight:NSFontWeightMedium];
+    [self addSubview:_btnToday];
     _btnNext  = btn(@"btnNext",  @selector(showNextMonth:));
 
     NSInteger numRows = [[NSUserDefaults standardUserDefaults] integerForKey:kMoCalendarNumRows];
@@ -737,10 +743,6 @@ static const CFTimeInterval kSnapDuration = 0.15;
         NSArray *months = [_formatter shortMonthSymbols];
         title = [NSString stringWithFormat:@"%@ %zd", months[self.monthDate.month], self.monthDate.year];
     }
-#ifdef DEBUG
-    // Mark debug builds so they're easy to tell apart from release builds.
-    title = [title stringByAppendingString:@" ✱"];
-#endif
     return title;
 }
 

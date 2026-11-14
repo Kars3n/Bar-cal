@@ -26,7 +26,7 @@
 "15 minutes before" = "15 分钟前";
 "30 minutes before" = "30 分钟前";
 "31 days" = "31 天";
-"About Itsycal" = "关于 Itsycal";
+"About Bar-cal" = "关于 Bar-cal";
 /* About prefs tab label */
 "About" = "关于";
 "Add Location or Video Call" = "添加位置或视频通话";
@@ -44,9 +44,9 @@
 "Calendar" = "日历";
 "Calendar access denied.
 
-Itsycal is more useful when it can display events from your calendars. You can change this setting in System Settings › Privacy & Security › Calendars" = "日历访问被拒绝。
+Bar-cal is more useful when it can display events from your calendars. You can change this setting in System Settings › Privacy & Security › Calendars" = "日历访问被拒绝。
 
-当 Itsycal 可以显示你的日历事件时会更好用。你可以在 “系统设置 › 隐私与安全 › 日历” 中更改此设置。";
+当 Bar-cal 可以显示你的日历事件时会更好用。你可以在 “系统设置 › 隐私与安全 › 日历” 中更改此设置。";
 "Calendar access was denied." = "日历访问被拒绝。";
 /* Accessibility description for menu bar icon showing a grid of days */
 "Calendar grid" = "日历网格";
@@ -94,15 +94,15 @@ Itsycal is more useful when it can display events from your calendars. You can c
 "Help…" = "帮助…";
 "Hide icon" = "隐藏图标";
 "Highlight:" = "高亮：";
-"Itsycal cannot create a new event unless there is at least one calendar you have permission to modify." = "除非有至少一个有权限修改的日历，否则 Itsycal 无法创建新事件。";
+"Bar-cal cannot create a new event unless there is at least one calendar you have permission to modify." = "除非有至少一个有权限修改的日历，否则 Bar-cal 无法创建新事件。";
 /* Accessibility description for menu bar icon showing the Itsycal face */
-"Itsycal face" = "Itsycal 笑脸";
-"Itsycal is more useful when you allow it to add events to your calendars. You can change this setting in System Settings › Privacy & Security › Calendars." = "当你允许 Itsycal 将事件添加到你的日历中时会更好用。你可以在 “系统设置 › 隐私与安全 › 日历” 中更改此设置。";
-"Itsycal must be run from the Applications folder in order to work properly.
+"Bar-cal face" = "Bar-cal 笑脸";
+"Bar-cal is more useful when you allow it to add events to your calendars. You can change this setting in System Settings › Privacy & Security › Calendars." = "当你允许 Bar-cal 将事件添加到你的日历中时会更好用。你可以在 “系统设置 › 隐私与安全 › 日历” 中更改此设置。";
+"Bar-cal must be run from the Applications folder in order to work properly.
 
-Please quit Itsycal, move it to the Applications folder, and relaunch." = "必须从应用程序文件夹运行 Itsycal 才能正常工作。
+Please quit Bar-cal, move it to the Applications folder, and relaunch." = "必须从应用程序文件夹运行 Bar-cal 才能正常工作。
 
-请退出 Itsycal，将其移动到应用程序文件夹，然后重新启动。";
+请退出 Bar-cal，将其移动到应用程序文件夹，然后重新启动。";
 /* Button in the event popover that joins the event's video meeting (Zoom, Teams, etc.) */
 "Join" = "加入";
 "Keyboard shortcut" = "键盘快捷键";
@@ -121,7 +121,7 @@ Please quit Itsycal, move it to the Applications folder, and relaunch." = "必�
 /* Accessibility label for menu bar icon picker */
 "Menu bar icon" = "菜单栏图标";
 "Monday" = "星期一";
-"Move Itsycal to the Applications folder" = "将 Itsycal 移动到应用程序文件夹";
+"Move Bar-cal to the Applications folder" = "将 Bar-cal 移动到应用程序文件夹";
 /* Repeat ends never */
 "Never" = "从不";
 "New Event" = "新事件";
@@ -141,10 +141,10 @@ Please quit Itsycal, move it to the Applications folder, and relaunch." = "必�
 /* Heading of the agenda's section of overdue reminders */
 "Overdue" = "已过期";
 /* Tooltip for the pin button, which keeps Itsycal's window open */
-"Pin Itsycal" = "固定 Itsycal";
+"Pin Bar-cal" = "固定 Bar-cal";
 /* Tooltip for the calendar's button that shows the previous month */
 "Previous Month" = "上个月";
-"Quit Itsycal" = "退出 Itsycal";
+"Quit Bar-cal" = "退出 Bar-cal";
 /* Heading in Settings before reminders access is granted */
 "Reminders" = "提醒事项";
 "Reminders access denied. You can change this setting in System Settings › Privacy & Security › Reminders" = "提醒事项访问被拒绝。你可以在 “系统设置 › 隐私与安全 › 提醒事项” 中更改此设置。";
@@ -189,7 +189,7 @@ Please quit Itsycal, move it to the Applications folder, and relaunch." = "必�
 "Top right of screen" = "屏幕右上角";
 "Tuesday" = "星期二";
 /* Tooltip for the pin button while Itsycal is pinned */
-"Unpin Itsycal" = "取消固定 Itsycal";
+"Unpin Bar-cal" = "取消固定 Bar-cal";
 "Use colored dots" = "使用彩色圆点";
 "Wednesday" = "星期三";
 "Window position:" = "窗口位置：";

@@ -5,3 +5,14 @@ xcuserdata/
 Local.xcconfig
 
 .DS_Store
+._*
+
+# Build products and local validation evidence
+dist/
+build/
+*.xcarchive/
+*.xcresult/
+design-qa.md
+Design/QA/
+Design/Generated/*/qa/
+Design/Generated/identity-concepts/functional-reference.jpg

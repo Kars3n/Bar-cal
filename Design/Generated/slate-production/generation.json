@@ -1,0 +1,12 @@
+[
+  {
+    "asset": "slate_foreground",
+    "prompt": "Create a production-ready isolated app-icon FOREGROUND asset for the selected Bar-cal Slate identity in the attached reference. Reference image is the approved visual target, not an edit target. Output one square 1024x1024 PNG with actual transparent alpha background. Reproduce ONLY the offset silver two-bar mark inside the large app icon at the left of the reference: tall left silver slab with an inward right-facing notch and a shorter right silver slab, both slightly diagonal parallelogram silhouettes with softly radiused corners. Match the reference geometry, precise gap, polished satin silver material, cool highlights and very subtle warm highlight on the shorter slab. The two pieces form one compact recognizable identity mark. Keep it centered, upright orientation as shown, occupying about 52% of canvas width and 66% of canvas height. This foreground will be placed over a native graphite rounded-square background by macOS Icon Composer. Do NOT generate the dark tile or any rounded-square container, border, backdrop, external cast shadow, UI, calendar, text, logo caption, or mockup. No face or original Itsycal imagery. One matching standalone asset, no variations or sheet. Ensure a genuinely transparent background, crisp contour and high quality at small sizes.",
+    "tool": "ChatGPT built-in image generation"
+  },
+  {
+    "asset": "slate_menubar",
+    "prompt": "Create a standalone monochrome macOS MENU BAR TEMPLATE ICON for Bar-cal's approved Slate identity, based on the small white two-bar mark at the top right of the attached reference and the same silver mark in the large icon. Output one square PNG with genuinely transparent alpha background. Exactly ONE small bold clean silhouette centered in the image, occupying about 60% width and 76% height: left taller offset slab with a precise inward notch on its right edge, a shorter bar parallel at the right, clean gap between them, gently slanted top and bottom edges. Match the same two-piece identity. Pure solid black silhouette, no gray, no color, no silver material, no highlights, no shadows, no squircle or container, no surrounding UI, no text, no numbers, no face. The mark must be extremely simple and readable when downsampled to 16 pixels high. Smooth edges with anti-aliasing only at the contour. Reference is the approved identity, not to be reproduced as a presentation. Deliver just the matching transparent glyph asset.",
+    "tool": "ChatGPT built-in image generation"
+  }
+]

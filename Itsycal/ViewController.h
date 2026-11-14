@@ -16,5 +16,7 @@
 - (void)keyboardShortcutActivated;
 - (void)removeStatusItem;
 - (void)dateURLReceived:(NSDate *)showDate;
+- (void)showItsycalWindow;
+- (void)applyPresentationMode;
 
 @end

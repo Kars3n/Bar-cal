@@ -21,6 +21,8 @@
 @property (nonatomic) NSArray *events;
 @property (nonatomic, weak) id<AgendaDelegate> delegate;
 @property (nonatomic) BOOL showLocation;
+@property (nonatomic, copy) NSString *emptyStateMessage;
+@property (nonatomic) BOOL offersCalendarSelection;
 
 // Reload and scroll to the top.
 - (void)reloadData;
@@ -53,5 +55,6 @@
 - (void)agendaWantsToToggleOverdueSection;
 - (void)agendaShowCalendarAppAtDate:(NSDate *)date;
 - (CGFloat)agendaMaxPossibleHeight;
+- (void)agendaWantsToChooseCalendars;
 
 @end

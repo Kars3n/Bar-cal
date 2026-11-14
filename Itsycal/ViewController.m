@@ -28,6 +28,13 @@
 #import "MoUtils.h"
 #import "Themer.h"
 #import "MenuTimer.h"
+#import "EdgeTabController.h"
+#import "TodoViewController.h"
+
+@interface DrawerPageHost : NSView @end
+@implementation DrawerPageHost
+- (BOOL)acceptsFirstResponder { return YES; }
+@end
 
 // Keys observed in NSUserDefaults for preference changes. Registered in
 // -fileNotifications and unregistered in -dealloc.
@@ -36,7 +43,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     return @[kShowEventDays, kMenuBarIconType, kShowMonthInIcon, kShowDayOfWeekInIcon,
               kShowDaysWithNoEventsInAgenda, kShowMeetingIndicator, kHideIcon,
               kBaselineOffset, kClockFormat, kWindowPosition, kShowCompletedReminders,
-              kShowOverdueReminders];
+              kShowOverdueReminders, kPresentationMode, kScreenEdge, kDrawerTabsEnabled, kSelectedDrawerTab, kPinItsycal];
 }
 
 // One of a day's dot colors, for -dotColorsForDate:useColor:.
@@ -81,6 +88,9 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     NSPopover *_newEventPopover;
     NSMutableArray *_notificationTokens;
     MenuTimer *_menuTimer;
+    EdgeTabController *_edgeTabController;
+    NSView *_calendarContent;
+    TodoViewController *_todoVC;
 }
 
 - (void)dealloc
@@ -125,7 +135,11 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
         [btn setTarget:self];
         [btn setAction:action];
         [btn setContentTintColor:Theme.buttonTintColor];
-        [btn setImage:[NSImage imageNamed:imageName]];
+        NSDictionary *symbols = @{@"btnAdd": @"plus", @"btnCal": @"calendar", @"btnOpt": @"gearshape", @"btnPin": @"pin"};
+        NSImage *image = [NSImage imageWithSystemSymbolName:symbols[imageName] accessibilityDescription:nil];
+        image = [image imageWithSymbolConfiguration:[NSImageSymbolConfiguration configurationWithPointSize:15 weight:NSFontWeightRegular]];
+        image.size = NSMakeSize(22, 22);
+        [btn setImage:image];
         [btn setKeyEquivalent:key];
         [btn setKeyEquivalentModifierMask:NSEventModifierFlagCommand];
         [v addSubview:btn];
@@ -138,7 +152,8 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     _btnOpt = btn(@"btnOpt", @"", @selector(showOptionsMenu:));
     _btnPin = btn(@"btnPin", @"p", @selector(pin:));
     _btnPin.keyEquivalentModifierMask = 0;
-    _btnPin.alternateImage = [NSImage imageNamed:@"btnPinAlt"];
+    _btnPin.alternateImage = [[NSImage imageWithSystemSymbolName:@"pin.fill" accessibilityDescription:nil] imageWithSymbolConfiguration:[NSImageSymbolConfiguration configurationWithPointSize:15 weight:NSFontWeightRegular]];
+    _btnPin.alternateImage.size = NSMakeSize(22, 22);
     [_btnPin setButtonType:NSButtonTypeToggle];
 
     // The buttons' tooltips. Their badges show the key equivalents.
@@ -154,8 +169,8 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     __weak MoButton *btnPin = _btnPin;
     [_tooltips addTooltipToView:_btnPin label:^NSString *{
         return btnPin.state == NSControlStateValueOn
-            ? NSLocalizedString(@"Unpin Itsycal", @"Tooltip for the pin button while Itsycal is pinned")
-            : NSLocalizedString(@"Pin Itsycal", @"Tooltip for the pin button, which keeps Itsycal's window open");
+            ? NSLocalizedString(@"Unpin Bar-cal", @"Tooltip for the pin button while Bar-cal is pinned")
+            : NSLocalizedString(@"Pin Bar-cal", @"Tooltip for the pin button, which keeps Bar-cal's window open");
     } shortcut:nil];
     
     // Agenda
@@ -172,7 +187,26 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     [vfl :@"H:|-8-[_btnAdd]-(>=0)-[_btnPin]-6-[_btnCal]-6-[_btnOpt]-8-|" :NSLayoutFormatAlignAllCenterY];
     [vfl :@"V:|[_moCal]-6-[_btnOpt(22)]-1-[agenda]-(-1)-|"];
     
-    self.view = v;
+    _calendarContent = v;
+    NSView *container = [DrawerPageHost new];
+    container.translatesAutoresizingMaskIntoConstraints = NO;
+    [container addSubview:v];
+    _todoVC = [TodoViewController new];
+    [self addChildViewController:_todoVC];
+    NSView *todo = _todoVC.view;
+    todo.hidden = YES;
+    [container addSubview:todo];
+    // Keep the shared drawer footprint stable when switching tabs. The hidden
+    // calendar still supplies its native size; both pages fill that footprint.
+    for (NSView *page in @[v, todo]) {
+        [NSLayoutConstraint activateConstraints:@[
+            [page.leadingAnchor constraintEqualToAnchor:container.leadingAnchor],
+            [page.trailingAnchor constraintEqualToAnchor:container.trailingAnchor],
+            [page.topAnchor constraintEqualToAnchor:container.topAnchor],
+            [page.bottomAnchor constraintEqualToAnchor:container.bottomAnchor],
+        ]];
+    }
+    self.view = container;
 }
 
 - (void)viewDidLoad
@@ -197,9 +231,14 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     // and before the status item, whose context menu includes it.
     _menuTimer = [MenuTimer new];
 
-    [self createStatusItem];
+    if ([NSUserDefaults.standardUserDefaults integerForKey:kPresentationMode] != BarCalPresentationScreenEdge) {
+        [self createStatusItem];
+    }
     
     _ec = [[EventCenter alloc] initWithCalendar:_nsCal delegate:self];
+    _todoVC.eventCenter = _ec;
+    __weak typeof(self) weakSelf = self;
+    _todoVC.showSettings = ^{ [weakSelf showPrefs:nil]; };
     
     _tooltipVC = [TooltipViewController new];
     _tooltipVC.nsCal = _nsCal;
@@ -242,7 +281,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     _moCal.showWeeks = [defaults boolForKey:kShowWeeks];
     _moCal.doNotDrawOutlineAroundCurrentMonth = [defaults boolForKey:kDoNotDrawOutlineAroundCurrentMonth];
 
-    [self.itsycalWindow makeFirstResponder:_moCal];
+    [self updateDrawerContent];
 }
 
 #pragma mark -
@@ -258,6 +297,15 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     BOOL cmdOptFlag = (flags & NSEventModifierFlagCommand) && (flags & NSEventModifierFlagOption) &&  !(flags & (NSEventModifierFlagShift | NSEventModifierFlagControl));
     BOOL cmdShiftFlag = (flags & NSEventModifierFlagCommand) && (flags & NSEventModifierFlagShift) &&  !(flags & (NSEventModifierFlagOption | NSEventModifierFlagControl));
     unichar keyChar = [charsIgnoringModifiers characterAtIndex:0];
+    if (noFlags && keyChar == 'p' && _todoVC.active) {
+        [NSUserDefaults.standardUserDefaults setBool:![NSUserDefaults.standardUserDefaults boolForKey:kPinItsycal] forKey:kPinItsycal];
+        return;
+    }
+    if (cmdFlag && (keyChar == '1' || keyChar == '2') && _edgeTabController.enabled
+        && [NSUserDefaults.standardUserDefaults boolForKey:kDrawerTabsEnabled]) {
+        [NSUserDefaults.standardUserDefaults setInteger:keyChar == '2' ? BarCalDrawerTabTodo : BarCalDrawerTabCalendar forKey:kSelectedDrawerTab];
+        return;
+    }
     
     if (keyChar == 'w' && noFlags) {
         [[NSUserDefaults standardUserDefaults] setBool:!_moCal.showWeeks forKey:kShowWeeks];
@@ -306,7 +354,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     if (_ec.calendarAccessGranted == NO) {
         NSAlert *alert = [NSAlert new];
         alert.messageText = NSLocalizedString(@"Calendar access was denied.", @"");
-        alert.informativeText = NSLocalizedString(@"Itsycal is more useful when you allow it to add events to your calendars. You can change this setting in System Settings › Privacy & Security › Calendars.", @"");
+        alert.informativeText = NSLocalizedString(@"Bar-cal is more useful when you allow it to add events to your calendars. You can change this setting in System Settings › Privacy & Security › Calendars.", @"");
         [alert runModal];
         return;
     }
@@ -325,7 +373,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     if (atLeastOneModifiableCalendar == NO) {
         NSAlert *alert = [NSAlert new];
         alert.messageText = NSLocalizedString(@"There are no modifiable calendars.", @"");
-        alert.informativeText = NSLocalizedString(@"Itsycal cannot create a new event unless there is at least one calendar you have permission to modify.", @"");
+        alert.informativeText = NSLocalizedString(@"Bar-cal cannot create a new event unless there is at least one calendar you have permission to modify.", @"");
         [alert runModal];
         return;
     }
@@ -417,7 +465,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     NSMenu *optMenu = [[NSMenu alloc] initWithTitle:@"Options Menu"];
     NSInteger i = 0;
 
-    [optMenu insertItemWithTitle:NSLocalizedString(@"About Itsycal", @"") action:@selector(showAbout:) keyEquivalent:@"" atIndex:i++];
+    [optMenu insertItemWithTitle:NSLocalizedString(@"About Bar-cal", @"") action:@selector(showAbout:) keyEquivalent:@"" atIndex:i++];
     [optMenu insertItem:[NSMenuItem separatorItem] atIndex:i++];
     [optMenu insertItemWithTitle:NSLocalizedString(@"Go to Date…", @"") action:@selector(showDatePickerPopover:) keyEquivalent:@"T" atIndex:i++];
     [optMenu insertItem:[NSMenuItem separatorItem] atIndex:i++];
@@ -426,7 +474,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     [optMenu insertItem:[NSMenuItem separatorItem] atIndex:i++];
     [optMenu insertItemWithTitle:NSLocalizedString(@"Help…", @"") action:@selector(navigateToHelp:) keyEquivalent:@"" atIndex:i++];
     [optMenu insertItem:[NSMenuItem separatorItem] atIndex:i++];
-    [optMenu insertItemWithTitle:NSLocalizedString(@"Quit Itsycal", @"") action:@selector(terminate:) keyEquivalent:@"q" atIndex:i++];
+    [optMenu insertItemWithTitle:NSLocalizedString(@"Quit Bar-cal", @"") action:@selector(terminate:) keyEquivalent:@"q" atIndex:i++];
 
     // Never show menu item images, whatever the system configuration.
     for (NSMenuItem *item in optMenu.itemArray) {
@@ -539,6 +587,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
 
 - (void)createStatusItem
 {
+    if (_statusItem) return;
     _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     _statusItem.button.target = self;
     _statusItem.button.action = @selector(statusItemClicked:);
@@ -585,7 +634,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     item = [menu addItemWithTitle:NSLocalizedString(@"Date & Time…", @"") action:@selector(openDateAndTimePrefs:) keyEquivalent:@""];
     item.target = self;
     [menu addItem:[NSMenuItem separatorItem]];
-    item = [menu addItemWithTitle:NSLocalizedString(@"Quit Itsycal", @"") action:@selector(terminate:) keyEquivalent:@""];
+    item = [menu addItemWithTitle:NSLocalizedString(@"Quit Bar-cal", @"") action:@selector(terminate:) keyEquivalent:@""];
     item.target = NSApp;
 
     // Never show menu item images, whatever the system configuration.
@@ -620,6 +669,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
 
 - (void)removeStatusItem
 {
+    _edgeTabController.enabled = NO;
     if (_rightClickMonitor) {
         [NSEvent removeMonitor:_rightClickMonitor];
         _rightClickMonitor = nil;
@@ -634,6 +684,47 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
         //   [[NSStatusBar systemStatusBar] removeStatusItem:_statusItem];
         //   _statusItem = nil;
     }
+}
+
+- (void)applyPresentationMode
+{
+    if (!self.view.window) return;
+    BOOL useEdge = [NSUserDefaults.standardUserDefaults integerForKey:kPresentationMode] == BarCalPresentationScreenEdge;
+    if (!_edgeTabController) {
+        _edgeTabController = [[EdgeTabController alloc] initWithCalendarWindow:self.itsycalWindow];
+        __weak typeof(self) weakSelf = self;
+        _edgeTabController.toggleCalendar = ^{ [weakSelf statusItemClicked:nil]; };
+        _edgeTabController.showSettings = ^{ [weakSelf showPrefs:nil]; };
+        _edgeTabController.selectTab = ^(NSInteger tab) {
+            [NSUserDefaults.standardUserDefaults setInteger:tab forKey:kSelectedDrawerTab];
+        };
+    }
+    if (useEdge) {
+        if (_statusItem) {
+            [self removeStatusItem];
+            [NSStatusBar.systemStatusBar removeStatusItem:_statusItem];
+            _statusItem = nil;
+        }
+        _edgeTabController.enabled = YES;
+        _screenFrame = _edgeTabController.screen.visibleFrame;
+        [_edgeTabController updatePlacement];
+    } else {
+        _edgeTabController.enabled = NO;
+        [self createStatusItem];
+    }
+    [self updateDrawerContent];
+    [_agendaVC.view setNeedsLayout:YES];
+}
+
+- (void)updateDrawerContent
+{
+    BOOL todo = _edgeTabController.enabled && [NSUserDefaults.standardUserDefaults boolForKey:kDrawerTabsEnabled]
+        && [NSUserDefaults.standardUserDefaults integerForKey:kSelectedDrawerTab] == BarCalDrawerTabTodo;
+    _calendarContent.hidden = todo;
+    _todoVC.view.hidden = !todo;
+    _todoVC.active = todo;
+    [_edgeTabController updateTabs];
+    [self.itsycalWindow makeFirstResponder:todo ? self.view : _moCal];
 }
 
 - (NSString *)iconText
@@ -687,7 +778,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
 
 - (void)updateMenubarIcon
 {
-    NSString *accessibilityTitle = @"Itsycal";
+    NSString *accessibilityTitle = @"Bar-cal";
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     BOOL hideIcon = [defaults boolForKey:kHideIcon];
     if (hideIcon) {
@@ -780,10 +871,13 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
 
     NSInteger menuBarIconType = [defaults integerForKey:kMenuBarIconType];
     if (menuBarIconType == 2) {
-        return [NSImage imageNamed:@"menubaricon2"];
+        NSImage *image = [NSImage imageWithSystemSymbolName:@"calendar" accessibilityDescription:nil];
+        image.size = NSMakeSize(18, 18);
+        image.template = YES;
+        return image;
     }
     if (menuBarIconType == 3) {
-        return [NSImage imageNamed:@"menubaricon3"];
+        return [NSImage imageNamed:@"SlateMark"];
     }
 
     // Does user want outline icon or solid icon?
@@ -840,6 +934,12 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
 
 - (void)positionItsycalWindowForInitialPresentation:(BOOL)initialPresentation
 {
+    if (_edgeTabController.enabled) {
+        _screenFrame = _edgeTabController.screen.visibleFrame;
+        [_edgeTabController updatePlacement];
+        [_agendaVC.view setNeedsLayout:YES];
+        return;
+    }
     NSRect statusItemFrame = [_statusItem.button.window convertRectToScreen:_statusItem.button.frame];
 
     // Hack alert:
@@ -973,6 +1073,11 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
 
 - (void)statusItemClicked:(id)sender
 {
+    if (_edgeTabController.enabled) {
+        if (_edgeTabController.expanded) [self hideItsycalWindow];
+        else [self showItsycalWindow];
+        return;
+    }
     // If there are multiple screens and Itsycal is showing
     // on one and the user clicks the menu item on another,
     // instead of a regular toggle, we want Itsycal to hide
@@ -1028,15 +1133,17 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     [[NSApplication sharedApplication] unhideWithoutActivation];
     [self positionItsycalWindowForInitialPresentation:YES];
     [_agendaVC scrollToTop];
-    [self.itsycalWindow makeKeyAndOrderFront:self];
-    [self.itsycalWindow makeFirstResponder:_moCal];
+    if (_edgeTabController.enabled) [_edgeTabController showCalendar];
+    else [self.itsycalWindow makeKeyAndOrderFront:self];
+    [self updateDrawerContent];
     _inactiveTime = 0;
 }
 
 - (void)hideItsycalWindow
 {
     [_tooltips hideImmediately];
-    [self.itsycalWindow orderOut:self];
+    if (_edgeTabController.enabled) [_edgeTabController hideCalendarAnimated:YES];
+    else [self.itsycalWindow orderOut:self];
     [_newEventPopover close];
     _inactiveTime = MonotonicClockTime();
 }
@@ -1303,6 +1410,7 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
     // Only the data changed. While the user is looking, keep their place.
     // (The agenda scrolls to the top when the window opens.)
     [self updateAgendaKeepingScrollPosition:self.itsycalWindow.isVisible];
+    if (_todoVC.active) [_todoVC reload];
 }
 
 - (MoDate)fetchStartDate
@@ -1340,6 +1448,17 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
 - (void)updateAgendaKeepingScrollPosition:(BOOL)keepScrollPosition
 {
     NSInteger days = [self daysToShowInAgenda];
+    BOOL hasSelectedCalendars = NO;
+    for (id entry in [_ec sourcesAndCalendars]) {
+        if ([entry isKindOfClass:CalendarInfo.class] && ((CalendarInfo *)entry).selected) {
+            hasSelectedCalendars = YES;
+            break;
+        }
+    }
+    _agendaVC.offersCalendarSelection = !hasSelectedCalendars;
+    _agendaVC.emptyStateMessage = days == 0 ? nil : (hasSelectedCalendars
+        ? NSLocalizedString(@"Nothing scheduled in this range.", @"Agenda empty state")
+        : NSLocalizedString(@"Choose calendars to see your day.", @"Agenda setup prompt"));
     NSArray *datesAndEvents = [self datesAndEventsForDate:_moCal.selectedDate days:days];
     _agendaVC.events = [[self overdueRowsForAgendaDays:days] arrayByAddingObjectsFromArray:datesAndEvents];
     if (keepScrollPosition) {
@@ -1349,6 +1468,12 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
         [_agendaVC reloadData];
     }
     [self showMeetingIndicatorIfNecessary];
+}
+
+- (void)agendaWantsToChooseCalendars
+{
+    [self showPrefs:self];
+    [self.prefsVC showEvents];
 }
 
 // The Overdue section at the top of the agenda: a heading with the
@@ -1655,7 +1780,18 @@ static NSArray<NSString *> *ObservedDefaultsKeys(void)
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:kShowEventDays]) {
+    if ([keyPath isEqualToString:kPinItsycal]) {
+        _btnPin.state = [NSUserDefaults.standardUserDefaults boolForKey:kPinItsycal] ? NSControlStateValueOn : NSControlStateValueOff;
+    }
+    else if ([keyPath isEqualToString:kSelectedDrawerTab]) {
+        [_tooltips hideImmediately];
+        [_newEventPopover close];
+        [self updateDrawerContent];
+    }
+    else if ([keyPath isEqualToString:kPresentationMode] || [keyPath isEqualToString:kScreenEdge] || [keyPath isEqualToString:kDrawerTabsEnabled]) {
+        [self applyPresentationMode];
+    }
+    else if ([keyPath isEqualToString:kShowEventDays]) {
         // More agenda days can extend the fetch range (see -fetchEndDate).
         // Fetching does nothing if those days are already cached.
         [self updateAgenda];

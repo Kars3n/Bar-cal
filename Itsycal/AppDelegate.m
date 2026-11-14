@@ -39,7 +39,8 @@
         kShowDayOfWeekInIcon:  @(NO),
         kShowEventDots:        @(YES),
         kUseColoredDots:       @(YES),
-        kThemePreference:      @0, // System=0, Light=1, Dark=2
+        kThemePreference:      @(ThemePreferenceSlate),
+        kMenuBarIconType:      @3, // Bar-cal's generated Slate mark.
         kHideIcon:             @(NO),
         kShowLocation:         @(NO),
         kSizePreference:       @0, // Small=0, Medium=1, Large=2
@@ -47,7 +48,7 @@
         kShowCompletedReminders: @(YES), // Calendar's default
         kShowOverdueReminders: @(YES),
         kOverdueSectionExpanded: @(NO),
-        kDoNotDrawOutlineAroundCurrentMonth: @(NO),
+        kDoNotDrawOutlineAroundCurrentMonth: @(YES),
         kShowMeetingIndicator: @(NO),
         kBaselineOffset:       @0,  // Clamped to -2.0...2.0
         kEnableMeetingButtonIndefinitely: @(NO),
@@ -55,6 +56,13 @@
         kAllowOutsideApplicationsFolder: @(NO),
         kDoNotCheckLoginItemStatus: @(NO),
         kWindowPosition:       @(WindowPositionBelowMenuBarIcon),
+        kPresentationMode:     @(BarCalPresentationMenuBar),
+        kScreenEdge:           @(BarCalScreenEdgeRight),
+        kEdgeTabPosition:      @0.5,
+        kEdgeTabAnchor:        @0.5,
+        kDrawerTabsEnabled:    @NO,
+        kSelectedDrawerTab:    @(BarCalDrawerTabCalendar),
+        kTodoListIdentifier:   @"",
         // Disable AppKit's scroll edge effect (macOS 27), which draws a
         // hairline under the floating date header in the agenda.
         @"NSScrollPocketEnabled": @(NO),
@@ -66,8 +74,8 @@
     
     // Set kThemePreference to system in the unlikely case it's invalid.
     NSInteger themePref = [defaults integerForKey:kThemePreference];
-    if (themePref < ThemePreferenceSystem || themePref > ThemePreferenceDark) {
-        [defaults setInteger:ThemePreferenceSystem forKey:kThemePreference];
+    if (themePref < ThemePreferenceSystem || themePref > ThemePreferenceSlate) {
+        [defaults setInteger:ThemePreferenceSlate forKey:kThemePreference];
     }
 
     // Set kSizePreference to small in the unlikely case it's invalid.
@@ -124,7 +132,7 @@
     // contentViewController (which would replace the contentView).
     _vc = [ViewController new];
     _wc = [[NSWindowController alloc] initWithWindow:[ItsycalWindow  new]];
-    NSView *contentView = _wc.window.contentView;
+    NSView *contentView = ((ItsycalWindow *)_wc.window).calendarContentView;
     NSLayoutGuide *safeArea = contentView.safeAreaLayoutGuide;
     [contentView addSubview:_vc.view];
     [NSLayoutConstraint activateConstraints:@[
@@ -140,6 +148,18 @@
     // is created because Theme instantiation relies on checking a
     // property on the window to determine its appearance.
     [Theme bind:@"themePreference" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:kThemePreference] options:@{NSContinuouslyUpdatesValueBindingOption: @(YES)}];
+
+    [_vc applyPresentationMode];
+
+    if ([NSProcessInfo.processInfo.arguments containsObject:@"--show-calendar"]) {
+        [_vc showItsycalWindow];
+    }
+}
+
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
+{
+    [_vc showItsycalWindow];
+    return YES;
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification
@@ -213,12 +233,12 @@ static NSDate *DateFromURLDateString(NSString *string)
     // Itsycal is not being run from /Applications.
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
     NSAlert *alert = [NSAlert new];
-    alert.messageText = NSLocalizedString(@"Move Itsycal to the Applications folder", nil);
-    alert.informativeText = [NSLocalizedString(@"Itsycal must be run from the Applications folder in order to work properly.\n\nPlease quit Itsycal, move it to the Applications folder, and relaunch.", nil) stringByAppendingString:[NSString stringWithFormat:@"\n\n%@", bundlePath]];
+    alert.messageText = NSLocalizedString(@"Move Bar-cal to the Applications folder", nil);
+    alert.informativeText = [NSLocalizedString(@"Bar-cal must be run from the Applications folder in order to work properly.\n\nPlease quit Bar-cal, move it to the Applications folder, and relaunch.", nil) stringByAppendingString:[NSString stringWithFormat:@"\n\n%@", bundlePath]];
     alert.icon = [NSImage imageNamed:@"move"];
     alert.showsHelp = YES;
     alert.delegate = self;
-    [alert addButtonWithTitle:NSLocalizedString(@"Quit Itsycal", @"")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Quit Bar-cal", @"")];
     [alert runModal];
     [NSApp terminate:nil];
 }
@@ -233,7 +253,7 @@ static NSDate *DateFromURLDateString(NSString *string)
 - (NSMenu *)mainMenu
 {
     NSMenu *menu = [NSMenu new];
-    [menu addItemWithTitle:@"Quit Itsycal" action:@selector(terminate:) keyEquivalent:@"q"];
+    [menu addItemWithTitle:@"Quit Bar-cal" action:@selector(terminate:) keyEquivalent:@"q"];
     [menu addItemWithTitle:@"Close" action:@selector(performClose:) keyEquivalent:@"w"];
     // AppKit implements undo: and redo: (in NSWindow and NSTextView),
     // but no public header declares them, so look them up by name.

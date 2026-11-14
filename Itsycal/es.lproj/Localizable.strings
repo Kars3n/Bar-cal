@@ -26,7 +26,7 @@
 "15 minutes before" = "15 minutos antes";
 "30 minutes before" = "30 minutos antes";
 "31 days" = "31 días";
-"About Itsycal" = "Acerca de Itsycal";
+"About Bar-cal" = "Acerca de Bar-cal";
 /* About prefs tab label */
 "About" = "Acerca de";
 "Add Location or Video Call" = "Agregar ubicación o llamada de video";
@@ -44,9 +44,9 @@
 "Calendar" = "Calendario";
 "Calendar access denied.
 
-Itsycal is more useful when it can display events from your calendars. You can change this setting in System Settings › Privacy & Security › Calendars" = "Acceso denegado.
+Bar-cal is more useful when it can display events from your calendars. You can change this setting in System Settings › Privacy & Security › Calendars" = "Acceso denegado.
 
-Itsycal es más útil cuando puede mostrar los eventos de sus calendarios. Puede cambiar esta configuración en Ajustes del Sistema › Privacidad y seguridad › Calendarios";
+Bar-cal es más útil cuando puede mostrar los eventos de sus calendarios. Puede cambiar esta configuración en Ajustes del Sistema › Privacidad y seguridad › Calendarios";
 "Calendar access was denied." = "Acceso denegado.";
 /* Accessibility description for menu bar icon showing a grid of days */
 "Calendar grid" = "Cuadrícula de calendario";
@@ -94,15 +94,15 @@ Itsycal es más útil cuando puede mostrar los eventos de sus calendarios. Puede
 "Help…" = "Ayuda…";
 "Hide icon" = "Ocultar icono";
 "Highlight:" = "Resaltar:";
-"Itsycal cannot create a new event unless there is at least one calendar you have permission to modify." = "Itsycal no puede crear un nuevo evento si no hay al menos un calendario con permisos para ser modificado.";
+"Bar-cal cannot create a new event unless there is at least one calendar you have permission to modify." = "Bar-cal no puede crear un nuevo evento si no hay al menos un calendario con permisos para ser modificado.";
 /* Accessibility description for menu bar icon showing the Itsycal face */
-"Itsycal face" = "Cara de Itsycal";
-"Itsycal is more useful when you allow it to add events to your calendars. You can change this setting in System Settings › Privacy & Security › Calendars." = "Itsycal es más útil cuando le permite agregar eventos a sus calendarios. Puede cambiar esta configuración en Ajustes del Sistema › Privacidad y seguridad › Calendarios.";
-"Itsycal must be run from the Applications folder in order to work properly.
+"Bar-cal face" = "Cara de Bar-cal";
+"Bar-cal is more useful when you allow it to add events to your calendars. You can change this setting in System Settings › Privacy & Security › Calendars." = "Bar-cal es más útil cuando le permite agregar eventos a sus calendarios. Puede cambiar esta configuración en Ajustes del Sistema › Privacidad y seguridad › Calendarios.";
+"Bar-cal must be run from the Applications folder in order to work properly.
 
-Please quit Itsycal, move it to the Applications folder, and relaunch." = "Itsycal se debe ejecutar desde la carpeta Aplicaciones con el fin de funcionar correctamente.
+Please quit Bar-cal, move it to the Applications folder, and relaunch." = "Bar-cal se debe ejecutar desde la carpeta Aplicaciones con el fin de funcionar correctamente.
 
-Por favor, cerrar Itsycal, trasladar a la carpeta Aplicaciones, y volver a arrancar.";
+Por favor, cerrar Bar-cal, trasladar a la carpeta Aplicaciones, y volver a arrancar.";
 /* Button in the event popover that joins the event's video meeting (Zoom, Teams, etc.) */
 "Join" = "Unirse";
 "Keyboard shortcut" = "Atajo de teclado";
@@ -121,7 +121,7 @@ Por favor, cerrar Itsycal, trasladar a la carpeta Aplicaciones, y volver a arran
 /* Accessibility label for menu bar icon picker */
 "Menu bar icon" = "Icono de la barra de menús";
 "Monday" = "Lunes";
-"Move Itsycal to the Applications folder" = "Trasladar Itsycal a la carpeta Aplicaciones";
+"Move Bar-cal to the Applications folder" = "Trasladar Bar-cal a la carpeta Aplicaciones";
 /* Repeat ends never */
 "Never" = "Nunca";
 "New Event" = "Nuevo evento";
@@ -141,10 +141,10 @@ Por favor, cerrar Itsycal, trasladar a la carpeta Aplicaciones, y volver a arran
 /* Heading of the agenda's section of overdue reminders */
 "Overdue" = "Vencidos";
 /* Tooltip for the pin button, which keeps Itsycal's window open */
-"Pin Itsycal" = "Mantener Itsycal";
+"Pin Bar-cal" = "Mantener Bar-cal";
 /* Tooltip for the calendar's button that shows the previous month */
 "Previous Month" = "Mes anterior";
-"Quit Itsycal" = "Salir de Itsycal";
+"Quit Bar-cal" = "Salir de Bar-cal";
 /* Heading in Settings before reminders access is granted */
 "Reminders" = "Recordatorios";
 "Reminders access denied. You can change this setting in System Settings › Privacy & Security › Reminders" = "Acceso a Recordatorios denegado. Puede cambiar esta configuración en Ajustes del Sistema › Privacidad y seguridad › Recordatorios";
@@ -189,7 +189,7 @@ Por favor, cerrar Itsycal, trasladar a la carpeta Aplicaciones, y volver a arran
 "Top right of screen" = "Arriba a la derecha de la pantalla";
 "Tuesday" = "Martes";
 /* Tooltip for the pin button while Itsycal is pinned */
-"Unpin Itsycal" = "Dejar de mantener Itsycal";
+"Unpin Bar-cal" = "Dejar de mantener Bar-cal";
 "Use colored dots" = "Usar puntos de colores";
 "Wednesday" = "Miércoles";
 "Window position:" = "Posición de la ventana:";

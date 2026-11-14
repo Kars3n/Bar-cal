@@ -26,7 +26,7 @@
 "15 minutes before" = "15분 전";
 "30 minutes before" = "30분 전";
 "31 days" = "31일";
-"About Itsycal" = "Itsycal 정보";
+"About Bar-cal" = "Bar-cal 정보";
 /* About prefs tab label */
 "About" = "정보";
 "Add Location or Video Call" = "위치 또는 화상 통화 추가";
@@ -44,7 +44,7 @@
 "Calendar" = "캘린더";
 "Calendar access denied.
 
-Itsycal is more useful when it can display events from your calendars. You can change this setting in System Settings › Privacy & Security › Calendars" = "시스템 설정 › 개인정보 보호 및 보안 › 캘린더에서 캘린더 접근을 허용해 주세요.
+Bar-cal is more useful when it can display events from your calendars. You can change this setting in System Settings › Privacy & Security › Calendars" = "시스템 설정 › 개인정보 보호 및 보안 › 캘린더에서 캘린더 접근을 허용해 주세요.
 
 Itsycal은 캘린더 이벤트를 보여줄 수 있을 때 더 유용해요.";
 "Calendar access was denied." = "캘린더 접근을 허용해 주세요.";
@@ -94,13 +94,13 @@ Itsycal은 캘린더 이벤트를 보여줄 수 있을 때 더 유용해요.";
 "Help…" = "도움말…";
 "Hide icon" = "아이콘 숨기기";
 "Highlight:" = "강조:";
-"Itsycal cannot create a new event unless there is at least one calendar you have permission to modify." = "새 이벤트를 만들려면 수정할 수 있는 캘린더가 하나 이상 필요해요.";
+"Bar-cal cannot create a new event unless there is at least one calendar you have permission to modify." = "새 이벤트를 만들려면 수정할 수 있는 캘린더가 하나 이상 필요해요.";
 /* Accessibility description for menu bar icon showing the Itsycal face */
-"Itsycal face" = "Itsycal 얼굴";
-"Itsycal is more useful when you allow it to add events to your calendars. You can change this setting in System Settings › Privacy & Security › Calendars." = "캘린더 접근을 허용해 주세요. Itsycal이 캘린더에 이벤트를 추가할 수 있으면 더 편하게 쓸 수 있어요.";
-"Itsycal must be run from the Applications folder in order to work properly.
+"Bar-cal face" = "Bar-cal 얼굴";
+"Bar-cal is more useful when you allow it to add events to your calendars. You can change this setting in System Settings › Privacy & Security › Calendars." = "캘린더 접근을 허용해 주세요. Itsycal이 캘린더에 이벤트를 추가할 수 있으면 더 편하게 쓸 수 있어요.";
+"Bar-cal must be run from the Applications folder in order to work properly.
 
-Please quit Itsycal, move it to the Applications folder, and relaunch." = "Itsycal을 제대로 쓰려면 응용 프로그램 폴더로 옮겨 주세요.
+Please quit Bar-cal, move it to the Applications folder, and relaunch." = "Itsycal을 제대로 쓰려면 응용 프로그램 폴더로 옮겨 주세요.
 
 Itsycal을 종료한 뒤 응용 프로그램 폴더로 옮기고 다시 열어 주세요.";
 /* Button in the event popover that joins the event's video meeting (Zoom, Teams, etc.) */
@@ -121,7 +121,7 @@ Itsycal을 종료한 뒤 응용 프로그램 폴더로 옮기고 다시 열어 �
 /* Accessibility label for menu bar icon picker */
 "Menu bar icon" = "메뉴 막대 아이콘";
 "Monday" = "월요일";
-"Move Itsycal to the Applications folder" = "Itsycal을 응용 프로그램 폴더로 옮겨 주세요";
+"Move Bar-cal to the Applications folder" = "Itsycal을 응용 프로그램 폴더로 옮겨 주세요";
 /* Repeat ends never */
 "Never" = "안 함";
 "New Event" = "새 이벤트";
@@ -141,10 +141,10 @@ Itsycal을 종료한 뒤 응용 프로그램 폴더로 옮기고 다시 열어 �
 /* Heading of the agenda's section of overdue reminders */
 "Overdue" = "기한 지남";
 /* Tooltip for the pin button, which keeps Itsycal's window open */
-"Pin Itsycal" = "Itsycal 고정하기";
+"Pin Bar-cal" = "Bar-cal 고정하기";
 /* Tooltip for the calendar's button that shows the previous month */
 "Previous Month" = "이전 달";
-"Quit Itsycal" = "Itsycal 종료";
+"Quit Bar-cal" = "Bar-cal 종료";
 /* Heading in Settings before reminders access is granted */
 "Reminders" = "미리 알림";
 "Reminders access denied. You can change this setting in System Settings › Privacy & Security › Reminders" = "미리 알림 접근이 거부되었어요. 이 설정은 시스템 설정 › 개인정보 보호 및 보안 › 미리 알림에서 변경할 수 있어요.";
@@ -189,7 +189,7 @@ Itsycal을 종료한 뒤 응용 프로그램 폴더로 옮기고 다시 열어 �
 "Top right of screen" = "화면 오른쪽 상단";
 "Tuesday" = "화요일";
 /* Tooltip for the pin button while Itsycal is pinned */
-"Unpin Itsycal" = "Itsycal 고정 해제하기";
+"Unpin Bar-cal" = "Bar-cal 고정 해제하기";
 "Use colored dots" = "색상 있는 점 사용";
 "Wednesday" = "수요일";
 "Window position:" = "창 위치:";

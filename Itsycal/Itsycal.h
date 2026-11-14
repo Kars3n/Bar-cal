@@ -41,6 +41,29 @@ extern NSString * const kDoNotCheckLoginItemStatus;
 extern NSString * const kWindowPosition;
 extern NSString * const kTimerEndDate;
 extern NSString * const kTimerRecentMinutes;
+extern NSString * const kPresentationMode;
+extern NSString * const kScreenEdge;
+extern NSString * const kEdgeTabPosition;
+extern NSString * const kEdgeTabDisplay;
+extern NSString * const kEdgeTabAnchor;
+extern NSString * const kDrawerTabsEnabled;
+extern NSString * const kSelectedDrawerTab;
+extern NSString * const kTodoListIdentifier;
+
+typedef NS_ENUM(NSInteger, BarCalDrawerTab) {
+    BarCalDrawerTabCalendar = 0,
+    BarCalDrawerTabTodo = 1
+};
+
+typedef NS_ENUM(NSInteger, BarCalPresentationMode) {
+    BarCalPresentationMenuBar = 0,
+    BarCalPresentationScreenEdge = 1
+};
+
+typedef NS_ENUM(NSInteger, BarCalScreenEdge) {
+    BarCalScreenEdgeRight = 0,
+    BarCalScreenEdgeLeft = 1
+};
 
 typedef NS_ENUM(NSInteger, WindowPosition) {
     WindowPositionBelowMenuBarIcon = 0,

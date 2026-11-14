@@ -1,10 +1,10 @@
-# Contributing to Itsycal
+# Contributing to Bar-cal
 
 Thank you for your interest in contributing!
 
 ## Setting Up Code Signing
 
-Itsycal uses a local xcconfig file to manage code signing so that your
+Bar-cal uses a local xcconfig file to manage code signing so that your
 personal signing settings are never committed to the repository.
 
 Before opening `Itsycal.xcodeproj`, copy the example config:
@@ -28,6 +28,10 @@ Membership at developer.apple.com):
 DEVELOPMENT_TEAM = XXXXXXXXXX
 CODE_SIGN_STYLE = Manual
 ```
+
+Use `./script/build_and_run.sh --verify` for local validation. The upstream
+project and scheme retain the name Itsycal; the app product is Bar-cal.
+See [BUILD.md](BUILD.md) for the focused native checks and release packaging.
 
 ## Submitting a Pull Request
 

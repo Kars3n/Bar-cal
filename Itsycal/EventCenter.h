@@ -58,6 +58,10 @@
 // main thread.
 - (void)requestRemindersAccessWithCompletion:(void (^)(void))completion;
 
+// Independent of the calendars/lists selected for the calendar agenda. Includes
+// undated reminders and only each recurring reminder's current occurrence.
+- (void)fetchTodoList:(NSString *)identifier completion:(void (^)(NSArray<EventInfo *> *items, NSError *error))completion;
+
 - (void)fetchEvents;
 
 // Sorted array of 2 types: NSStrings and CalendarInfo objects.

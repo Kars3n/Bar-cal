@@ -20,6 +20,23 @@ static NSColor *LightDarkColor(NSColor *light, NSColor *dark)
     }];
 }
 
+// Semantic colors remain dynamic so changing themes updates existing views.
+static NSColor *SlateColor(NSColor *fallback, NSUInteger hex)
+{
+    return [NSColor colorWithName:nil dynamicProvider:^NSColor *(NSAppearance *appearance) {
+        if (Theme.themePreference != ThemePreferenceSlate) return fallback;
+        return [NSColor colorWithSRGBRed:((hex >> 16) & 255) / 255.0
+                                  green:((hex >> 8) & 255) / 255.0
+                                   blue:(hex & 255) / 255.0 alpha:1];
+    }];
+}
+
+static void RedrawThemeViews(NSView *view)
+{
+    [view setNeedsDisplay:YES];
+    for (NSView *child in view.subviews) RedrawThemeViews(child);
+}
+
 @implementation Themer
 
 Themer *Theme = nil;
@@ -47,8 +64,11 @@ Themer *Theme = nil;
 
 - (void)setThemePreference:(ThemePreference)themePref {
     // Validate themePref before setting ivar.
-    _themePreference = (themePref < 0 || themePref > 2) ? 0 : themePref;
+    _themePreference = (themePref < 0 || themePref > ThemePreferenceSlate) ? ThemePreferenceSlate : themePref;
     [self adjustAppAppearanceForThemePreference];
+    for (NSWindow *window in NSApp.windows) {
+        RedrawThemeViews(window.contentView);
+    }
 }
 
 - (void)adjustAppAppearanceForThemePreference {
@@ -57,6 +77,7 @@ Themer *Theme = nil;
             NSApp.appearance = nil;
             break;
         case ThemePreferenceDark:
+        case ThemePreferenceSlate:
             NSApp.appearance = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
             break;
         case ThemePreferenceLight:
@@ -66,11 +87,11 @@ Themer *Theme = nil;
 }
 
 - (NSColor *)agendaDayTextColor {
-    return NSColor.secondaryLabelColor;
+    return SlateColor(NSColor.secondaryLabelColor, 0xB9BAC3);
 }
 
 - (NSColor *)agendaDividerColor {
-    return NSColor.separatorColor;
+    return SlateColor(NSColor.separatorColor, 0x454752);
 }
 
 - (NSColor *)agendaDOWTextColor {
@@ -78,7 +99,7 @@ Themer *Theme = nil;
 }
 
 - (NSColor *)agendaEventDateTextColor {
-    return NSColor.secondaryLabelColor;
+    return SlateColor(NSColor.secondaryLabelColor, 0xB9BAC3);
 }
 
 - (NSColor *)agendaEventTextColor {
@@ -95,50 +116,50 @@ Themer *Theme = nil;
 }
 
 - (NSColor *)buttonTintColor {
-    return LightDarkColor([NSColor colorWithWhite:0.45 alpha:1], [NSColor colorWithWhite:0.55 alpha:1]);
+    return SlateColor(LightDarkColor([NSColor colorWithWhite:0.45 alpha:1], [NSColor colorWithWhite:0.55 alpha:1]), 0xC8C9D0);
 }
 
 - (NSColor *)currentMonthOutlineColor {
-    return LightDarkColor(NSColor.labelColor, NSColor.secondaryLabelColor);
+    return SlateColor(LightDarkColor(NSColor.labelColor, NSColor.secondaryLabelColor), 0x7877E8);
 }
 
 - (NSColor *)currentMonthTextColor {
-    return NSColor.labelColor;
+    return SlateColor(NSColor.labelColor, 0xEEEDEB);
 }
 
 - (NSColor *)DOWTextColor {
-    return NSColor.labelColor;
+    return SlateColor(NSColor.labelColor, 0xC9CAD1);
 }
 
 - (NSColor *)highlightedDOWBackgroundColor {
-    return NSColor.secondarySystemFillColor;
+    return SlateColor(NSColor.secondarySystemFillColor, 0x353740);
 }
 
 - (NSColor *)highlightedDOWTextColor {
-    return NSColor.secondaryLabelColor;
+    return SlateColor(NSColor.secondaryLabelColor, 0xBBBCC6);
 }
 
 - (NSColor *)hoveredCellColor {
-    return NSColor.tertiaryLabelColor;
+    return SlateColor(NSColor.tertiaryLabelColor, 0x8D8FA2);
 }
 
 - (NSColor *)mainBackgroundColor {
     // windowBackgroundColor is white in Light Mode. In Dark
     // Mode, use a gray halfway between windowBackgroundColor
     // (0.118) and underPageBackgroundColor (0.157).
-    return LightDarkColor(NSColor.windowBackgroundColor, [NSColor colorWithWhite:0.137 alpha:1]);
+    return SlateColor(LightDarkColor(NSColor.windowBackgroundColor, [NSColor colorWithWhite:0.137 alpha:1]), 0x24262E);
 }
 
 - (NSColor *)monthTextColor {
-    return NSColor.labelColor;
+    return SlateColor(NSColor.labelColor, 0xEEEDEB);
 }
 
 - (NSColor *)noncurrentMonthTextColor {
-    return NSColor.tertiaryLabelColor;
+    return SlateColor(NSColor.tertiaryLabelColor, 0x8E909C);
 }
 
 - (NSColor *)pendingBackgroundColor {
-    return NSColor.secondarySystemFillColor;
+    return SlateColor(NSColor.secondarySystemFillColor, 0x353740);
 }
 
 - (NSColor *)resizeHandleBackgroundColor {
@@ -146,7 +167,7 @@ Themer *Theme = nil;
 }
 
 - (NSColor *)resizeHandleForegroundColor {
-    return NSColor.secondaryLabelColor;
+    return SlateColor(NSColor.secondaryLabelColor, 0x606370);
 }
 
 - (NSColor *)selectedCellColor {
@@ -154,15 +175,16 @@ Themer *Theme = nil;
 }
 
 - (NSColor *)todayCellColor {
-    return NSColor.systemBlueColor;
+    // White date text has 4.65:1 contrast against this periwinkle fill.
+    return SlateColor(NSColor.systemBlueColor, 0x6B68D0);
 }
 
 - (NSColor *)tooltipBackgroundColor {
-    return LightDarkColor (NSColor.windowBackgroundColor, [NSColor colorWithWhite:0.17 alpha:1]);
+    return SlateColor(LightDarkColor(NSColor.windowBackgroundColor, [NSColor colorWithWhite:0.17 alpha:1]), 0x30323D);
 }
 
 - (NSColor *)weekTextColor {
-    return NSColor.secondaryLabelColor;
+    return SlateColor(NSColor.secondaryLabelColor, 0xB9BAC3);
 }
 
 @end
